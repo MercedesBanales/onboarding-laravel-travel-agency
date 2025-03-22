@@ -7,6 +7,10 @@ use Lightit\Backoffice\Cities\App\Controllers\GetCityController;
 use Lightit\Backoffice\Cities\App\Controllers\ListCityController;
 use Lightit\Backoffice\Cities\App\Controllers\StoreCityController;
 use Lightit\Backoffice\Cities\App\Controllers\UpdateCityController;
+use Lightit\Backoffice\Flights\App\Controllers\GetFlightController;
+use Lightit\Backoffice\Flights\App\Controllers\ListFlightController;
+use Lightit\Backoffice\Flights\App\Controllers\StoreFlightController;
+use Lightit\Backoffice\Flights\App\Controllers\UpdateFlightController;
 use Lightit\Backoffice\Users\App\Controllers\{
     DeleteUserController, GetUserController, ListUserController, StoreUserController
 };
@@ -52,5 +56,19 @@ Route::prefix('cities')
     Route::post('/', StoreCityController::class);
     Route::patch('/{city}', UpdateCityController::class);
     Route::delete('/{city}', DeleteCityController::class);
+});
+
+/*
+|--------------------------------------------------------------------------
+| Flights Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('flights')
+->group(static function () {
+    Route::get('/', ListFlightController::class);
+    Route::get('/{flight}', GetFlightController::class);
+    Route::post('/', StoreFlightController::class);
+    Route::patch('/{flight}', UpdateFlightController::class);
+    Route::delete('/{flight}', DeleteCityController::class);
 });
 

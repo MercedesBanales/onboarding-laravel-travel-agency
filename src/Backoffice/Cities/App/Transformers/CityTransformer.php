@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lightit\Backoffice\Cities\App\Transformers;
 
 use Flugg\Responder\Transformers\Transformer;
@@ -10,7 +12,6 @@ class CityTransformer extends Transformer
     /**
      * Transform the model.
      *
-     * @param City $city
      *
      * @return array
      */
@@ -19,6 +20,8 @@ class CityTransformer extends Transformer
         return [
             'id' => $city->id,
             'name' => $city->name,
+            'departure_flights' => $city->departure_flights,
+            'arrival_flights' => $city->arrival_flights
         ];
     }
 }

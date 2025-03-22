@@ -11,10 +11,8 @@ class StoreCityAction
 {
     public function execute(CityDto $dto): City
     {
-        $city = City::create([
+        return City::create([
             'name' => $dto->name,
         ]);
-
-        return $city;
     }
 }
