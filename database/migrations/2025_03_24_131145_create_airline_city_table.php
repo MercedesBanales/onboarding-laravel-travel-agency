@@ -10,16 +10,16 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('cities', function (Blueprint $table) {
+        Schema::create('airline_city', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('timezone');
+            $table->foreignId('city_id')->constrained('cities')->cascadeOnDelete();
+            $table->foreignId('airline_id')->constrained('airlines')->cascadeOnDelete();
             $table->timestamps();
-        });
+        }); 
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('cities');
+        Schema::dropIfExists('airline_city');
     }
 };

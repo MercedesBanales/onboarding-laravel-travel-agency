@@ -10,7 +10,7 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class GetFlightController
 {
-    public function __invoke(Flight $flight) : JsonResponse
+    public function __invoke(Flight $flight): JsonResponse
     {
         return responder()
             ->success($flight, FlightTransformer::class)

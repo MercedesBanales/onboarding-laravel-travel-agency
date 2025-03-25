@@ -19,6 +19,7 @@ class ListFlightAction
         return QueryBuilder::for(Flight::class)
             ->with('departure_city')
             ->with('arrival_city')
+            ->with('airline')
             ->get();
     }
 }

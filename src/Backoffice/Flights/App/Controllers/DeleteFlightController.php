@@ -9,7 +9,7 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class DeleteFlightController
 {
-    public function __invoke(Flight $flight) : JsonResponse
+    public function __invoke(Flight $flight): JsonResponse
     {
         $flight->delete();
 

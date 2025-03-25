@@ -19,10 +19,11 @@ class FlightTransformer extends Transformer
     {
         return [
             'id' => $flight->id,
+            'airline' => $flight->airline,
             'departure_city' => $flight->departure_city,
             'arrival_city' => $flight->arrival_city,
             'departure_date' => $flight->departure_date,
-            'arrival_date' => $flight->arrival_date
+            'arrival_date' => $flight->arrival_date,
         ];
     }
 }

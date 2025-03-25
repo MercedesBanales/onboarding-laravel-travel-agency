@@ -2,11 +2,17 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Lightit\Backoffice\Airlines\App\Controllers\DeleteAirlineController;
+use Lightit\Backoffice\Airlines\App\Controllers\GetAirlineController;
+use Lightit\Backoffice\Airlines\App\Controllers\ListAirlineController;
+use Lightit\Backoffice\Airlines\App\Controllers\StoreAirlineController;
+use Lightit\Backoffice\Airlines\App\Controllers\UpdateAirlineController;
 use Lightit\Backoffice\Cities\App\Controllers\DeleteCityController;
 use Lightit\Backoffice\Cities\App\Controllers\GetCityController;
 use Lightit\Backoffice\Cities\App\Controllers\ListCityController;
 use Lightit\Backoffice\Cities\App\Controllers\StoreCityController;
 use Lightit\Backoffice\Cities\App\Controllers\UpdateCityController;
+use Lightit\Backoffice\Flights\App\Controllers\DeleteFlightController;
 use Lightit\Backoffice\Flights\App\Controllers\GetFlightController;
 use Lightit\Backoffice\Flights\App\Controllers\ListFlightController;
 use Lightit\Backoffice\Flights\App\Controllers\StoreFlightController;
@@ -60,6 +66,20 @@ Route::prefix('cities')
 
 /*
 |--------------------------------------------------------------------------
+| Airlines Routes
+|--------------------------------------------------------------------------
+*/
+Route::prefix('airlines')
+->group(static function () {
+    Route::get('/', ListAirlineController::class);
+    Route::get('/{airline}', GetAirlineController::class);
+    Route::post('/', StoreAirlineController::class);
+    Route::patch('/{airline}', UpdateAirlineController::class);
+    Route::delete('/{airline}', DeleteAirlineController::class);
+});
+
+/*
+|--------------------------------------------------------------------------
 | Flights Routes
 |--------------------------------------------------------------------------
 */
@@ -69,6 +89,6 @@ Route::prefix('flights')
     Route::get('/{flight}', GetFlightController::class);
     Route::post('/', StoreFlightController::class);
     Route::patch('/{flight}', UpdateFlightController::class);
-    Route::delete('/{flight}', DeleteCityController::class);
+    Route::delete('/{flight}', DeleteFlightController::class);
 });
 

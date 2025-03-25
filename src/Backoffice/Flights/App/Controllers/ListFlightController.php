@@ -10,7 +10,7 @@ use Lightit\Backoffice\Flights\Domain\Actions\ListFlightAction;
 
 class ListFlightController
 {
-    public function __invoke(ListFlightAction $action) : JsonResponse
+    public function __invoke(ListFlightAction $action): JsonResponse
     {
         $flights = $action->execute();
 

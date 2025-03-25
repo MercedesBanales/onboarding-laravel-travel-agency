@@ -12,7 +12,7 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class UpdateFlightController
 {
-    public function __invoke(Flight $flight, UpdateFlightRequest $request, UpdateFlightAction $action) : JsonResponse
+    public function __invoke(Flight $flight, UpdateFlightRequest $request, UpdateFlightAction $action): JsonResponse
     {
         $flight = $action->execute($flight, $request->toDto());
 

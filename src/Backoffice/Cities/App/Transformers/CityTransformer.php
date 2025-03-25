@@ -20,8 +20,9 @@ class CityTransformer extends Transformer
         return [
             'id' => $city->id,
             'name' => $city->name,
+            'timezone' => $city->timezone,
             'departure_flights' => $city->departure_flights,
-            'arrival_flights' => $city->arrival_flights
+            'arrival_flights' => $city->arrival_flights,
         ];
     }
 }

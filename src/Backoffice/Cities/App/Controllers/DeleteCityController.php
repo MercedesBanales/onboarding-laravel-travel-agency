@@ -9,7 +9,7 @@ use Lightit\Backoffice\Cities\Domain\Models\City;
 
 class DeleteCityController
 {
-    public function __invoke(City $city) : JsonResponse
+    public function __invoke(City $city): JsonResponse
     {
         $city->delete();
 

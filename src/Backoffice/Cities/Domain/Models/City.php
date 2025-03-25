@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Lightit\Backoffice\Cities\Domain\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 /**
@@ -26,21 +28,30 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
  * @property-read int|null $arrival_flights_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $departure_flights
  * @property-read int|null $departure_flights_count
+ * @property string $timezone
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|City whereTimezone($value)
  * @mixin \Eloquent
  */
 class City extends Model
 {
     protected $guarded = [
-        'id'
+        'id',
     ];
 
-    public function departure_flights() : HasMany
+    protected $hidden = [ 'pivot' ];
+
+    public function departure_flights(): HasMany
     {
         return $this->hasMany(Flight::class, 'departure_city_id');
     }
 
-    public function arrival_flights() : HasMany
+    public function arrival_flights(): HasMany
     {
         return $this->hasMany(Flight::class, 'arrival_city_id');
+    }
+
+    public function airlines() : BelongsToMany
+    {
+        return $this->belongsToMany(Airline::class, 'airline_city', 'airline_id', 'city_id');
     }
 }

@@ -11,7 +11,7 @@ use Lightit\Backoffice\Flights\Domain\Actions\StoreFlightAction;
 
 class StoreFlightController
 {
-    public function __invoke(StoreFlightRequest $request, StoreFlightAction $action) : JsonResponse
+    public function __invoke(StoreFlightRequest $request, StoreFlightAction $action): JsonResponse
     {
         $flight = $action->execute($request->toDto());
 

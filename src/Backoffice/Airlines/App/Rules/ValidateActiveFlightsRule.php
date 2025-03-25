@@ -1,0 +1,69 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Lightit\Backoffice\Airlines\App\Rules;
+
+use Closure;
+use Illuminate\Contracts\Validation\DataAwareRule;
+use Illuminate\Contracts\Validation\ValidationRule;
+use Illuminate\Support\Carbon;
+use Illuminate\Translation\PotentiallyTranslatedString;
+use Lightit\Backoffice\Airlines\Domain\Models\Airline;
+use Lightit\Backoffice\Flights\Domain\Models\Flight;
+
+class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
+{
+    public const ERROR_MESSAGE = "The airline's current flights are not enabled by the updated cities";
+
+    public const ENABLED_CITIES_IDS = 'enabled_cities_ids';
+
+    /**
+     * All of the data under validation.
+     *
+     * @var array<string, mixed>
+     */
+    protected $data = [];
+
+    public function __construct(private Airline $airline) {}
+ 
+    /**
+     * Set the data under validation.
+     *
+     * @param  array<string, mixed>  $data
+     */
+    public function setData(array $data): static
+    {
+        $this->data = $data;
+ 
+        return $this;
+    }
+
+    /**
+     * @param  Closure(string): PotentiallyTranslatedString  $fail
+     */
+    public function validate(string $attribute, mixed $value, Closure $fail): void
+    {
+        $flights = $this->airline->flights;
+
+        foreach($flights as $flight)
+        {
+            $arrival_date = Carbon::parse($flight->arrival_date, $flight->arrival_city->timezone);
+            if ($this->flightIsActive($arrival_date) && !$this->flightIsEnabledByAirline($flight, $value))
+            {
+                $fail(self::ERROR_MESSAGE);
+            }
+        } 
+    }
+
+    private function flightIsActive(Carbon $arrival_date) : bool
+    {
+        return $arrival_date->greaterThan(now());
+    }
+
+    private function flightIsEnabledByAirline(Flight $flight, mixed $value)
+    {
+        return in_array($flight->departure_city_id, $value) 
+            && in_array($flight->arrival_city_id, $value);
+    }
+}

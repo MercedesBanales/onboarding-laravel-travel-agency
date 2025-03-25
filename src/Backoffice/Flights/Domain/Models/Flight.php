@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Flights\Domain\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 use Lightit\Backoffice\Cities\Domain\Models\City;
 
 /**
  * 
  *
- * @property int $id
- * @property int $departure_city_id
- * @property int $arrival_city_id
- * @property string $departure_date
- * @property string $arrival_date
+ * @property int                             $id
+ * @property int                             $departure_city_id
+ * @property int                             $arrival_city_id
+ * @property string                          $departure_date
+ * @property string                          $arrival_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read City|null $arrivalCity
@@ -33,21 +33,29 @@ use Lightit\Backoffice\Cities\Domain\Models\City;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight whereUpdatedAt($value)
  * @property-read City|null $arrival_city
  * @property-read City|null $departure_city
+ * @property int $airline_id
+ * @property-read Airline $airline
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight whereAirlineId($value)
  * @mixin \Eloquent
  */
 class Flight extends Model
 {
     protected $guarded = [
-        'id'
+        'id',
     ];
     
-    public function departure_city() : BelongsTo
+    public function departure_city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'departure_city_id');
     }
 
-    public function arrival_city() : BelongsTo
+    public function arrival_city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'arrival_city_id');
+    }
+
+    public function airline(): BelongsTo
+    {
+        return $this->belongsTo(Airline::class, 'airline_id');
     }
 }

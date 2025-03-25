@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Cities\App\Requests;
 
+use Carbon\CarbonTimeZone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Lightit\Backoffice\Cities\Domain\DataTransferObjects\CityDto;
@@ -13,6 +14,8 @@ class StoreCityRequest extends FormRequest
 {
     public const NAME = 'name';
 
+    public const TIMEZONE = 'timezone';
+
     /**
      * @return array<string, mixed>
      */
@@ -20,6 +23,7 @@ class StoreCityRequest extends FormRequest
     {
         return [
             self::NAME => ['required', Rule::unique(City::class)],
+            self::TIMEZONE => ['required', 'timezone:all']
         ];
     }
 
@@ -27,6 +31,7 @@ class StoreCityRequest extends FormRequest
     {
         return new CityDto(
             name: $this->string(self::NAME)->toString(),
+            timezone: CarbonTimeZone::create($this->string(self::TIMEZONE)->toString())
         );
     }
 }
