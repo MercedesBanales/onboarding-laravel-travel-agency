@@ -23,7 +23,7 @@ class StoreCityRequest extends FormRequest
     {
         return [
             self::NAME => ['required', Rule::unique(City::class)],
-            self::TIMEZONE => ['required', 'timezone:all']
+            self::TIMEZONE => ['required', 'timezone:all'],
         ];
     }
 

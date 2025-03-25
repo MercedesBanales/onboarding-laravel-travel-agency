@@ -6,7 +6,6 @@ namespace Lightit\Backoffice\Cities\App\Requests;
 
 use Carbon\CarbonTimeZone;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Lightit\Backoffice\Cities\Domain\DataTransferObjects\CityDto;
 
 class UpdateCityRequest extends FormRequest
@@ -21,7 +20,7 @@ class UpdateCityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            self::TIMEZONE => ['timezone:all']
+            self::TIMEZONE => ['timezone:all'],
         ];
     }
 

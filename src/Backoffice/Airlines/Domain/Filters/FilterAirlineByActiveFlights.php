@@ -1,10 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lightit\Backoffice\Airlines\Domain\Filters;
 
-use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
+use Spatie\QueryBuilder\Filters\Filter;
 
 class FilterAirlineByActiveFlights implements Filter
 {
@@ -14,7 +15,6 @@ class FilterAirlineByActiveFlights implements Filter
             ->whereHas('flights', function (Builder $query) use ($value) {
                 $query
                     ->where('arrival_date', '>', now());
-
             }, '=', $value);
     }
 }

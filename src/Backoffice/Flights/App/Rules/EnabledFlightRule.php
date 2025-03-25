@@ -28,12 +28,14 @@ class EnabledFlightRule implements DataAwareRule, ValidationRule
      */
     protected $data = [];
 
-    public function __construct(private Flight|null $flight = null) {}
+    public function __construct(private readonly Flight|null $flight = null)
+    {
+    }
  
     /**
      * Set the data under validation.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      */
     public function setData(array $data): static
     {
@@ -43,14 +45,16 @@ class EnabledFlightRule implements DataAwareRule, ValidationRule
     }
     
     /**
-     * @param  Closure(string): PotentiallyTranslatedString  $fail
+     * @param Closure(string): PotentiallyTranslatedString $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$this->flightEnabledByAirline()) $fail(self::ERROR_MESSAGE);
+        if (! $this->flightEnabledByAirline()) {
+            $fail(self::ERROR_MESSAGE);
+        }
     }
 
-    private function flightEnabledByAirline() : bool
+    private function flightEnabledByAirline(): bool
     {
         $airline_id = $this->data[self::AIRLINE_ID] ?? null;
         $airline = $airline_id ? Airline::find($airline_id) : $this->flight->airline;
@@ -59,8 +63,7 @@ class EnabledFlightRule implements DataAwareRule, ValidationRule
         $departure_city_id = $this->data[self::DEPARTURE_CITY_ID] ?? null;
         $arrival_city_id = $this->data[self::ARRIVAL_CITY_ID] ?? null;
 
-        return ($departure_city_id && $enabled_cities->contains($departure_city_id)) &&
-        ($arrival_city_id && $enabled_cities->contains($arrival_city_id));
+        return ($departure_city_id && $enabled_cities->contains($departure_city_id))
+        && ($arrival_city_id && $enabled_cities->contains($arrival_city_id));
     }
 }
-

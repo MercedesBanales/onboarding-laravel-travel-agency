@@ -13,7 +13,7 @@ class UpdateCityAction
     {
         $city->update([
             'name' => $dto->name ?? $city->name,
-            'timezone' => $dto->timezone ?? $city->timezone
+            'timezone' => $dto->timezone ?? $city->timezone,
         ]);
 
         return $city;

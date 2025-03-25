@@ -13,7 +13,7 @@ class StoreCityAction
     {
         return City::create([
             'name' => $dto->name,
-            'timezone' => $dto->timezone
+            'timezone' => $dto->timezone,
         ]);
     }
 }

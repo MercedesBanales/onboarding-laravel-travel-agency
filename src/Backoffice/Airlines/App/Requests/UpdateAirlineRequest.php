@@ -28,8 +28,8 @@ class UpdateAirlineRequest extends FormRequest
 
         return [
             self::NAME => [Rule::unique(Airline::class)],
-            self::ENABLED_CITIES_IDS => ['bail', 
-                        Rule::exists(City::class, 'id'), 
+            self::ENABLED_CITIES_IDS => ['bail',
+                        Rule::exists(City::class, 'id'),
                         new ValidateActiveFlightsRule($airline)],
         ];
     }

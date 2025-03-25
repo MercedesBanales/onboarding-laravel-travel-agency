@@ -12,8 +12,11 @@ use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 
 class UpdateAirlineController
 {
-    public function __invoke(Airline $airline, UpdateAirlineRequest $request, UpdateAirlineAction $action) : JsonResponse
-    {
+    public function __invoke(
+        Airline $airline,
+        UpdateAirlineRequest $request,
+        UpdateAirlineAction $action,
+    ): JsonResponse {
         $airline = $action->execute($airline, $request->toDto());
 
         return responder()

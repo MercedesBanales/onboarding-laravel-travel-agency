@@ -9,7 +9,7 @@ use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 
 class DeleteAirlineController
 {
-    public function __invoke(Airline $airline) : JsonResponse
+    public function __invoke(Airline $airline): JsonResponse
     {
         $airline->delete();
 

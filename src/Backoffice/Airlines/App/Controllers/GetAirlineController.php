@@ -10,7 +10,7 @@ use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 
 class GetAirlineController
 {
-    public function __invoke(Airline $airline) : JsonResponse
+    public function __invoke(Airline $airline): JsonResponse
     {
         return responder()
             ->success($airline, AirlineTransformer::class)

@@ -24,20 +24,16 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
 
     public const ARRIVAL_DATE = 'arrival_date';
 
-    public function __construct(private Flight|null $flight = null) {}
+    public function __construct(private readonly Flight|null $flight = null)
+    {
+    }
 
-     /**
-     * All of the data under validation.
-     *
-     * @var array<string, mixed>
-     */
-    protected $data = [];
- 
     /**
-     * Set the data under validation.
-     *
-     * @param  array<string, mixed>  $data
-     */
+    * All of the data under validation.
+    *
+     * @var array<string, mixed>
+    */
+    protected $data = [];
 
     public function setData(array $data): static
     {
@@ -47,16 +43,20 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
     }
 
     /**
-     * @param  Closure(string): PotentiallyTranslatedString  $fail
+     * @param Closure(string): PotentiallyTranslatedString $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$this->checkValidFlightTimes()) $fail(self::ERROR_MESSAGE);
+        if (! $this->checkValidFlightTimes()) {
+            $fail(self::ERROR_MESSAGE);
+        }
     }
 
-    private function checkValidFlightTimes() : bool
+    private function checkValidFlightTimes(): bool
     {
-        $departure_city = $this->findCity($this->data[self::DEPARTURE_CITY_ID] ?? null) ?? $this->flight->departure_city;
+        $departure_city = $this->findCity(
+            $this->data[self::DEPARTURE_CITY_ID] ?? null
+        ) ?? $this->flight->departure_city;
         $arrival_city = $this->findCity($this->data[self::ARRIVAL_CITY_ID] ?? null) ?? $this->flight->arrival_city;
 
         $departure_date = $this->data[self::DEPARTURE_DATE] ?? $this->flight->departure_date;
@@ -68,7 +68,7 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
         return $departure_date_to_tz->lessThan($arrival_date_to_tz);
     }
 
-    private function findCity(int|null $id) : City|null
+    private function findCity(int|null $id): City|null
     {
         return City::find($id) ?? null;
     }

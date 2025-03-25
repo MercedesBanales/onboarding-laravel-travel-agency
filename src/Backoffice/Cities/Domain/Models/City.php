@@ -30,6 +30,8 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
  * @property-read int|null $departure_flights_count
  * @property string $timezone
  * @method static \Illuminate\Database\Eloquent\Builder<static>|City whereTimezone($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Airline> $airlines
+ * @property-read int|null $airlines_count
  * @mixin \Eloquent
  */
 class City extends Model
@@ -50,7 +52,7 @@ class City extends Model
         return $this->hasMany(Flight::class, 'arrival_city_id');
     }
 
-    public function airlines() : BelongsToMany
+    public function airlines(): BelongsToMany
     {
         return $this->belongsToMany(Airline::class, 'airline_city', 'airline_id', 'city_id');
     }

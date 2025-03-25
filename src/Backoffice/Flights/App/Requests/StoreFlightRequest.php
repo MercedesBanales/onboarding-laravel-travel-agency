@@ -33,7 +33,7 @@ class StoreFlightRequest extends FormRequest
     {
         return [
             self::AIRLINE_ID => [
-                'required', 
+                'required',
                 Rule::exists(Airline::class, 'id'),
                 new EnabledFlightRule()],
             self::DEPARTURE_CITY_ID => ['required', Rule::exists(City::class, 'id')],
@@ -42,7 +42,9 @@ class StoreFlightRequest extends FormRequest
                 'id'
             ), 'different:' . self::DEPARTURE_CITY_ID],
             self::DEPARTURE_DATE => ['required', Rule::date()->format(self::DATE_FORMAT)->after(now())],
-            self::ARRIVAL_DATE => ['required', Rule::date()->format(self::DATE_FORMAT)->after(now()), new ValidFlightTimeRule()],
+            self::ARRIVAL_DATE => ['required', Rule::date()->format(self::DATE_FORMAT)->after(
+                now()
+            ), new ValidFlightTimeRule()],
         ];
     }
 

@@ -11,7 +11,7 @@ use Lightit\Backoffice\Airlines\Domain\Actions\StoreAirlineAction;
 
 class StoreAirlineController
 {
-    public function __invoke(StoreAirlineRequest $request, StoreAirlineAction $action) : JsonResponse
+    public function __invoke(StoreAirlineRequest $request, StoreAirlineAction $action): JsonResponse
     {
         $airline = $action->execute($request->toDto());
 

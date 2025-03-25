@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Airlines\App\Requests;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Lightit\Backoffice\Airlines\Domain\DataTransferObjects\AirlineDto;
@@ -25,9 +24,9 @@ class StoreAirlineRequest extends FormRequest
         return [
             self::NAME => ['required', Rule::unique(Airline::class)],
             self::ENABLED_CITIES_IDS => [
-                    'required', 
-                    Rule::array(), 'min:1', 
-                    Rule::exists(City::class, 'id')]
+                    'required',
+                    Rule::array(), 'min:1',
+                    Rule::exists(City::class, 'id')],
         ];
     }
 

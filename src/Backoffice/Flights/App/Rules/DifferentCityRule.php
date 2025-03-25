@@ -25,14 +25,14 @@ class DifferentCityRule implements DataAwareRule, ValidationRule
      */
     protected $data = [];
  
-    public function __construct(private Flight $flight) {
-
+    public function __construct(private readonly Flight $flight)
+    {
     }
  
     /**
      * Set the data under validation.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      */
     public function setData(array $data): static
     {
@@ -42,16 +42,13 @@ class DifferentCityRule implements DataAwareRule, ValidationRule
     }
 
     /**
-     * @param  Closure(string): PotentiallyTranslatedString  $fail
+     * @param Closure(string): PotentiallyTranslatedString $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (($this->data[self::DEPARTURE_CITY_ID] ?? null) && $value == $this->flight->arrival_city_id
             || ($this->data[self::ARRIVAL_CITY_ID] ?? null) && $value == $this->flight->departure_city_id) {
-                $fail(self::ERROR_MESSAGE);
+            $fail(self::ERROR_MESSAGE);
         }
     }
-
-
-
 }

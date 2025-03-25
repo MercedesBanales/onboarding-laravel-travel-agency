@@ -25,12 +25,14 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
      */
     protected $data = [];
 
-    public function __construct(private Airline $airline) {}
+    public function __construct(private readonly Airline $airline)
+    {
+    }
  
     /**
      * Set the data under validation.
      *
-     * @param  array<string, mixed>  $data
+     * @param array<string, mixed> $data
      */
     public function setData(array $data): static
     {
@@ -40,30 +42,28 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
     }
 
     /**
-     * @param  Closure(string): PotentiallyTranslatedString  $fail
+     * @param Closure(string): PotentiallyTranslatedString $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $flights = $this->airline->flights;
 
-        foreach($flights as $flight)
-        {
+        foreach ($flights as $flight) {
             $arrival_date = Carbon::parse($flight->arrival_date, $flight->arrival_city->timezone);
-            if ($this->flightIsActive($arrival_date) && !$this->flightIsEnabledByAirline($flight, $value))
-            {
+            if ($this->flightIsActive($arrival_date) && ! $this->flightIsEnabledByAirline($flight, $value)) {
                 $fail(self::ERROR_MESSAGE);
             }
-        } 
+        }
     }
 
-    private function flightIsActive(Carbon $arrival_date) : bool
+    private function flightIsActive(Carbon $arrival_date): bool
     {
         return $arrival_date->greaterThan(now());
     }
 
     private function flightIsEnabledByAirline(Flight $flight, mixed $value)
     {
-        return in_array($flight->departure_city_id, $value) 
+        return in_array($flight->departure_city_id, $value)
             && in_array($flight->arrival_city_id, $value);
     }
 }

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Lightit\Backoffice\Airlines\Domain\Filters;
 
-use Spatie\QueryBuilder\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Spatie\QueryBuilder\Filters\Filter;
 
 class FilterAirlineByCity implements Filter
 {
@@ -14,6 +16,5 @@ class FilterAirlineByCity implements Filter
                 $query->where('departure_city_id', $value)
                     ->orWhere('arrival_city_id', $value);
             });
-
     }
 }
