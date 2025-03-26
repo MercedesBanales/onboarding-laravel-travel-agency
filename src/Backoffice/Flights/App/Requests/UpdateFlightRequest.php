@@ -12,6 +12,7 @@ use Lightit\Backoffice\Flights\App\Rules\DifferentCityRule;
 use Lightit\Backoffice\Flights\App\Rules\EnabledFlightRule;
 use Lightit\Backoffice\Flights\App\Rules\ValidFlightTimeRule;
 use Lightit\Backoffice\Flights\Domain\DataTransferObjects\FlightDto;
+use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class UpdateFlightRequest extends FormRequest
 {
@@ -32,6 +33,9 @@ class UpdateFlightRequest extends FormRequest
      */
     public function rules(): array
     {
+        /**
+         * @var Flight $flight
+         */
         $flight = $this->route('flight');
 
         return [

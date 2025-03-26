@@ -10,6 +10,7 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Carbon;
 use Illuminate\Translation\PotentiallyTranslatedString;
 use Lightit\Backoffice\Airlines\Domain\Models\Airline;
+use Lightit\Backoffice\Cities\Domain\Models\City;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
@@ -43,13 +44,18 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
 
     /**
      * @param Closure(string): PotentiallyTranslatedString $fail
+     * @param array<int> $value
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $flights = $this->airline->flights;
 
         foreach ($flights as $flight) {
-            $arrival_date = Carbon::parse($flight->arrival_date, $flight->arrival_city->timezone);
+            /**
+             * @var City $arrival_city
+             */
+            $arrival_city = $flight->arrival_city;
+            $arrival_date = Carbon::parse($flight->arrival_date, $arrival_city->timezone);
             if ($this->flightIsActive($arrival_date) && ! $this->flightIsEnabledByAirline($flight, $value)) {
                 $fail(self::ERROR_MESSAGE);
             }
@@ -61,7 +67,10 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
         return $arrival_date->greaterThan(now());
     }
 
-    private function flightIsEnabledByAirline(Flight $flight, mixed $value)
+    /**
+     * @param array<int> $value
+     */
+    private function flightIsEnabledByAirline(Flight $flight, array $value) : bool
     {
         return in_array($flight->departure_city_id, $value)
             && in_array($flight->arrival_city_id, $value);

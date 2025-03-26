@@ -12,7 +12,7 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
 class StoreFlightAction
 {
     /**
-     * @return Collection<int, Model>
+     * @return Flight
      */
     public function execute(FlightDto $dto): Flight
     {

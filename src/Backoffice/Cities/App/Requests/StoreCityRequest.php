@@ -29,9 +29,14 @@ class StoreCityRequest extends FormRequest
 
     public function toDto(): CityDto
     {
+        /**
+         * @var CarbonTimeZone $timezone
+         */
+        $timezone = CarbonTimeZone::create($this->string(self::TIMEZONE)->toString());
+        
         return new CityDto(
             name: $this->string(self::NAME)->toString(),
-            timezone: CarbonTimeZone::create($this->string(self::TIMEZONE)->toString())
+            timezone: $timezone
         );
     }
 }

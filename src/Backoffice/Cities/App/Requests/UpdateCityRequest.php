@@ -27,8 +27,8 @@ class UpdateCityRequest extends FormRequest
     public function toDto(): CityDto
     {
         return new CityDto(
-            name: $this->string(self::NAME)?->toString() ?: null,
-            timezone: CarbonTimeZone::create($this->string(self::TIMEZONE)) ?: null
+            name: $this->string(self::NAME)->toString() ?: null,
+            timezone: CarbonTimeZone::create($this->string(self::TIMEZONE)->toString()) ?: null
         );
     }
 }

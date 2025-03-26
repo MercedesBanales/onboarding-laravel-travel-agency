@@ -40,18 +40,27 @@ class City extends Model
         'id',
     ];
 
-    protected $hidden = [ 'pivot' ];
+    protected $hidden = [ 'pivot', 'created_at', 'updated_at' ];
 
+    /**
+    * @return HasMany<Flight, $this>
+    */
     public function departure_flights(): HasMany
     {
         return $this->hasMany(Flight::class, 'departure_city_id');
     }
 
+    /**
+    * @return HasMany<Flight, $this>
+    */
     public function arrival_flights(): HasMany
     {
         return $this->hasMany(Flight::class, 'arrival_city_id');
     }
 
+     /**
+    * @return BelongsToMany<Airline, $this>
+    */
     public function airlines(): BelongsToMany
     {
         return $this->belongsToMany(Airline::class, 'airline_city', 'airline_id', 'city_id');

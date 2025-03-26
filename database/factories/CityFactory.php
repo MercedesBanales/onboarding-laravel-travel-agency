@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Lightit\Backoffice\Cities\Domain\Models\City;
 
 /**
- * @extends Factory<\Lightit\Backoffice\Cities\App\Domain\Models\City>
+ * @extends Factory<\Lightit\Backoffice\Cities\Domain\Models\City>
  */
 class CityFactory extends Factory
 {

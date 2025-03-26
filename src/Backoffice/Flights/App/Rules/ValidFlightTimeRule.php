@@ -24,16 +24,16 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
 
     public const ARRIVAL_DATE = 'arrival_date';
 
-    public function __construct(private readonly Flight|null $flight = null)
-    {
-    }
-
     /**
     * All of the data under validation.
     *
      * @var array<string, mixed>
     */
-    protected $data = [];
+    protected array $data = [];
+
+    public function __construct(private readonly ?Flight $flight = null)
+    {
+    }
 
     public function setData(array $data): static
     {
@@ -47,19 +47,37 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (! $this->checkValidFlightTimes()) {
+        if (!$this->checkValidFlightTimes()) {
             $fail(self::ERROR_MESSAGE);
         }
     }
 
     private function checkValidFlightTimes(): bool
     {
-        $departure_city = $this->findCity(
-            $this->data[self::DEPARTURE_CITY_ID] ?? null
-        ) ?? $this->flight->departure_city;
-        $arrival_city = $this->findCity($this->data[self::ARRIVAL_CITY_ID] ?? null) ?? $this->flight->arrival_city;
+        if (!$this->flight) return false;
 
+        /**
+         * @var ?int $departure_city_id
+         */
+        $departure_city_id = $this->data[self::DEPARTURE_CITY_ID] ?? null;
+        /**
+         * @var ?int $arrival_city_id
+         */
+        $arrival_city_id = $this->data[self::ARRIVAL_CITY_ID] ?? null;
+
+        $departure_city = $this->findCity($departure_city_id) ?? $this->flight->departure_city;
+        $arrival_city = $this->findCity($arrival_city_id) ?? $this->flight->arrival_city;
+
+        if (!$departure_city || !$arrival_city) return false;
+
+        /**
+         * @var string $departure_date
+         */
         $departure_date = $this->data[self::DEPARTURE_DATE] ?? $this->flight->departure_date;
+        
+        /**
+         * @var string $arrival_date
+         */
         $arrival_date = $this->data[self::ARRIVAL_DATE] ?? $this->flight->arrival_date;
 
         $departure_date_to_tz = $this->formatDate($departure_date, $departure_city->timezone);
@@ -68,13 +86,14 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
         return $departure_date_to_tz->lessThan($arrival_date_to_tz);
     }
 
-    private function findCity(int|null $id): City|null
+    
+    private function findCity(?int $id): ?City
     {
         return City::find($id) ?? null;
     }
 
-    private function formatDate(string $date, string $timezone)
+    private function formatDate(string $date, string $timezone) : Carbon
     {
-        return Carbon::parse($date, $timezone);
+        return Carbon::parse($date)->setTimezone($timezone);
     }
 }

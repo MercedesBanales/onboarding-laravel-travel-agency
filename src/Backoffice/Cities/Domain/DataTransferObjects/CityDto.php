@@ -6,12 +6,17 @@ namespace Lightit\Backoffice\Cities\Domain\DataTransferObjects;
 
 use Carbon\CarbonTimeZone;
 use Illuminate\Database\Eloquent\Collection;
+use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 readonly class CityDto
 {
+    /**
+     * @param Collection<int, Flight> $departure_flights
+     * @param Collection<int, Flight> $arrival_flights
+    */
     public function __construct(
-        public string $name,
-        public CarbonTimeZone $timezone,
+        public string|null $name,
+        public CarbonTimeZone|null $timezone,
         public Collection $departure_flights = new Collection([]),
         public Collection $arrival_flights = new Collection([]),
     ) {

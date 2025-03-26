@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
         FlightFactory::new()
             ->count(20)
             ->state(function(){
-                $airline = Airline::inRandomOrder()->first();
+                $airline = Airline::inRandomOrder()->firstOrFail();
                 $enabled_cities = $airline->enabled_cities;
                 $departure_city = $enabled_cities->random(); 
                 $arrival_city = $enabled_cities->reject(fn ($city) => $city->id == $departure_city->id)->random();

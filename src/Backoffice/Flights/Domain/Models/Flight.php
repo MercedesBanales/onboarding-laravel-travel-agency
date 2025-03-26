@@ -40,20 +40,29 @@ use Lightit\Backoffice\Cities\Domain\Models\City;
  */
 class Flight extends Model
 {
-    protected $guarded = [
-        'id',
-    ];
-    
+    protected $guarded = [ 'id' ];
+
+    protected $hidden = ['created_at', 'updated_at'];
+
+     /**
+    * @return BelongsTo<City, $this>
+    */
     public function departure_city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'departure_city_id');
     }
 
+    /**
+    * @return BelongsTo<City, $this>
+    */
     public function arrival_city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'arrival_city_id');
     }
 
+     /**
+    * @return BelongsTo<Airline, $this>
+    */
     public function airline(): BelongsTo
     {
         return $this->belongsTo(Airline::class, 'airline_id');

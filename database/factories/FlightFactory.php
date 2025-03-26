@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
-use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 /**
- * @extends Factory<\Lightit\Shared\App\Flight>
+ * @extends Factory<\Lightit\Backoffice\Flights\Domain\Models\Flight>
  */
 class FlightFactory extends Factory
 {

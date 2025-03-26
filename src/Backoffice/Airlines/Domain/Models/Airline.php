@@ -34,11 +34,19 @@ class Airline extends Model
 {
     protected $guarded = [ 'id' ];
 
+    protected $hidden = ['created_at', 'updated_at'];
+
+     /**
+    * @return HasMany<Flight, $this>
+    */
     public function flights(): HasMany
     {
         return $this->hasMany(Flight::class, 'airline_id');
     }
 
+    /**
+    * @return BelongsToMany<City, $this, Pivot>
+    */
     public function enabled_cities(): BelongsToMany
     {
         return $this->belongsToMany(City::class, 'airline_city', 'airline_id', 'city_id');
