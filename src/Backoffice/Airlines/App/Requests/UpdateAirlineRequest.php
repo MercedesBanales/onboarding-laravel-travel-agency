@@ -24,9 +24,9 @@ class UpdateAirlineRequest extends FormRequest
      */
     public function rules(): array
     {
-         /**
+        /**
          * @var Airline $airline
-         */
+        */
         $airline = $this->route('airline');
 
         return [

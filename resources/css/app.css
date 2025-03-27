@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@source "../views";
+
+.component-container.active {
+    display: block;
+}

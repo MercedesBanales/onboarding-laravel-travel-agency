@@ -9,9 +9,6 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class UpdateFlightAction
 {
-    /**
-     * @return Flight
-     */
     public function execute(Flight $flight, FlightDto $dto): Flight
     {
         $flight->update([

@@ -31,9 +31,7 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
     */
     protected array $data = [];
 
-    public function __construct(private readonly ?Flight $flight = null)
-    {
-    }
+    public function __construct(private readonly ?Flight $flight = null) {}
 
     public function setData(array $data): static
     {
@@ -47,53 +45,32 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (!$this->checkValidFlightTimes()) {
+        if (! $this->checkValidFlightTimes()) {
             $fail(self::ERROR_MESSAGE);
         }
     }
 
     private function checkValidFlightTimes(): bool
     {
-        if (!$this->flight) return false;
-
-        /**
-         * @var ?int $departure_city_id
-         */
+        
         $departure_city_id = $this->data[self::DEPARTURE_CITY_ID] ?? null;
-        /**
-         * @var ?int $arrival_city_id
-         */
         $arrival_city_id = $this->data[self::ARRIVAL_CITY_ID] ?? null;
 
         $departure_city = $this->findCity($departure_city_id) ?? $this->flight->departure_city;
         $arrival_city = $this->findCity($arrival_city_id) ?? $this->flight->arrival_city;
 
-        if (!$departure_city || !$arrival_city) return false;
-
-        /**
-         * @var string $departure_date
-         */
         $departure_date = $this->data[self::DEPARTURE_DATE] ?? $this->flight->departure_date;
         
-        /**
-         * @var string $arrival_date
-         */
         $arrival_date = $this->data[self::ARRIVAL_DATE] ?? $this->flight->arrival_date;
 
-        $departure_date_to_tz = $this->formatDate($departure_date, $departure_city->timezone);
-        $arrival_date_to_tz = $this->formatDate($arrival_date, $arrival_city->timezone);
+        $departure_date_to_tz = $departure_city->dateToTimezone($departure_date);
+        $arrival_date_to_tz = $arrival_city->dateToTimezone($arrival_date);
 
         return $departure_date_to_tz->lessThan($arrival_date_to_tz);
     }
 
-    
-    private function findCity(?int $id): ?City
+    private function findCity(int|null $id): City|null
     {
         return City::find($id) ?? null;
-    }
-
-    private function formatDate(string $date, string $timezone) : Carbon
-    {
-        return Carbon::parse($date)->setTimezone($timezone);
     }
 }

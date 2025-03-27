@@ -44,8 +44,8 @@ class Flight extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-     /**
-    * @return BelongsTo<City, $this>
+    /**
+     * @return BelongsTo<City, $this>
     */
     public function departure_city(): BelongsTo
     {
@@ -53,15 +53,15 @@ class Flight extends Model
     }
 
     /**
-    * @return BelongsTo<City, $this>
+     * @return BelongsTo<City, $this>
     */
     public function arrival_city(): BelongsTo
     {
         return $this->belongsTo(City::class, 'arrival_city_id');
     }
 
-     /**
-    * @return BelongsTo<Airline, $this>
+    /**
+     * @return BelongsTo<Airline, $this>
     */
     public function airline(): BelongsTo
     {

@@ -16,7 +16,7 @@ class FilterCityByAirline implements Filter
     /**
      * @param Builder<City> $query
      */
-    public function __invoke(Builder $query, mixed $value, string $property) : void
+    public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query
             ->whereHas('departure_flights', function (Builder $query) use ($value) {

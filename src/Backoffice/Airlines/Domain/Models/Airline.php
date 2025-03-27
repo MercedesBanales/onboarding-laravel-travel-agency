@@ -36,8 +36,8 @@ class Airline extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
-     /**
-    * @return HasMany<Flight, $this>
+    /**
+     * @return HasMany<Flight, $this>
     */
     public function flights(): HasMany
     {
@@ -45,7 +45,7 @@ class Airline extends Model
     }
 
     /**
-    * @return BelongsToMany<City, $this, Pivot>
+     * @return BelongsToMany<City, $this, Pivot>
     */
     public function enabled_cities(): BelongsToMany
     {

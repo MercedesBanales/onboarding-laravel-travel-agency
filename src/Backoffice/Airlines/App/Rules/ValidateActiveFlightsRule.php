@@ -44,7 +44,7 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
 
     /**
      * @param Closure(string): PotentiallyTranslatedString $fail
-     * @param array<int> $value
+     * @param array<int>                                   $value
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
@@ -55,7 +55,7 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
              * @var City $arrival_city
              */
             $arrival_city = $flight->arrival_city;
-            $arrival_date = Carbon::parse($flight->arrival_date, $arrival_city->timezone);
+            $arrival_date = $arrival_city->dateToTimezone($flight->arrival_date);
             if ($this->flightIsActive($arrival_date) && ! $this->flightIsEnabledByAirline($flight, $value)) {
                 $fail(self::ERROR_MESSAGE);
             }
@@ -70,7 +70,7 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
     /**
      * @param array<int> $value
      */
-    private function flightIsEnabledByAirline(Flight $flight, array $value) : bool
+    private function flightIsEnabledByAirline(Flight $flight, array $value): bool
     {
         return in_array($flight->departure_city_id, $value)
             && in_array($flight->arrival_city_id, $value);

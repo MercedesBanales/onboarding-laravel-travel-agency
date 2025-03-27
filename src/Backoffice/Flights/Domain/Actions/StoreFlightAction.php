@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Flights\Domain\Actions;
 
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Lightit\Backoffice\Flights\Domain\DataTransferObjects\FlightDto;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 class StoreFlightAction
 {
-    /**
-     * @return Flight
-     */
     public function execute(FlightDto $dto): Flight
     {
         return Flight::create([

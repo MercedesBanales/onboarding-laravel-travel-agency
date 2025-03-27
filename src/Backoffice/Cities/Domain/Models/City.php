@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Cities\Domain\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -43,7 +44,7 @@ class City extends Model
     protected $hidden = [ 'pivot', 'created_at', 'updated_at' ];
 
     /**
-    * @return HasMany<Flight, $this>
+     * @return HasMany<Flight, $this>
     */
     public function departure_flights(): HasMany
     {
@@ -51,18 +52,23 @@ class City extends Model
     }
 
     /**
-    * @return HasMany<Flight, $this>
+     * @return HasMany<Flight, $this>
     */
     public function arrival_flights(): HasMany
     {
         return $this->hasMany(Flight::class, 'arrival_city_id');
     }
 
-     /**
-    * @return BelongsToMany<Airline, $this>
+    /**
+     * @return BelongsToMany<Airline, $this>
     */
     public function airlines(): BelongsToMany
     {
         return $this->belongsToMany(Airline::class, 'airline_city', 'airline_id', 'city_id');
+    }
+
+    public function dateToTimezone(string $date) : Carbon
+    {
+        return Carbon::parse($date)->setTimezone($this->timezone);
     }
 }

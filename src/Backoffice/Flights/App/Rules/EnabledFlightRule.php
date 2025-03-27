@@ -61,7 +61,7 @@ class EnabledFlightRule implements DataAwareRule, ValidationRule
         /**
          * @var Airline $airline
          */
-        $airline = $airline_id ? Airline::findOrFail($airline_id) : $this->flight?->airline;         
+        $airline = $airline_id ? Airline::findOrFail($airline_id) : $this->flight?->airline;
         $enabled_cities = $airline->enabled_cities->pluck('id');
         
         $departure_city_id = $this->data[self::DEPARTURE_CITY_ID] ?? null;
