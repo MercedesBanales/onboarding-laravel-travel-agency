@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Lightit\Backoffice\Cities\Domain\Actions;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Lightit\Backoffice\Cities\Domain\Filters\FilterCityByAirline;
 use Lightit\Backoffice\Cities\Domain\Models\City;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
-use Illuminate\Pagination\LengthAwarePaginator;
 
 class ListCityAction
 {

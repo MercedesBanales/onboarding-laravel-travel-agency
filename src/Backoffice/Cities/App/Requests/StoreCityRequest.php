@@ -27,7 +27,7 @@ class StoreCityRequest extends FormRequest
     }
 
     public function toDto(): CityDto
-    {  
+    {
         return new CityDto(
             name: $this->string(self::NAME)->toString(),
             timezone: $this->string(self::TIMEZONE)->toString(),

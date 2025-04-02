@@ -13,7 +13,7 @@ class UpdateAirlineAction
     {
         $airline->update([
             'name' => $dto->name ?? $airline->name,
-            'description' => $dto->description ?? $airline->description
+            'description' => $dto->description ?? $airline->description,
         ]);
 
         $airline->enabled_cities()->sync($dto->enabled_cities_ids ?? $airline->enabled_cities->pluck('id'));

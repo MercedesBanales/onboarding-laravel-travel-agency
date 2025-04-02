@@ -13,7 +13,7 @@ class StoreAirlineAction
     {
         $airline = Airline::create([
             'name' => $dto->name,
-            'description' => $dto->description
+            'description' => $dto->description,
         ]);
 
         $airline->enabled_cities()->attach($dto->enabled_cities_ids);
