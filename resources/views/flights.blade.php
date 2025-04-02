@@ -1,3 +1,3 @@
-<x-layout>
+<x-layout.layout>
     <div>Flights</div>
-</x-layout>
+</x-layout.layout>

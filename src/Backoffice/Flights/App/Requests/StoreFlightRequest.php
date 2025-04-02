@@ -42,7 +42,7 @@ class StoreFlightRequest extends FormRequest
                 'id'
             ), 'different:' . self::DEPARTURE_CITY_ID],
             self::DEPARTURE_DATE => ['required', Rule::date()->format(self::DATE_FORMAT)->after(now())],
-            self::ARRIVAL_DATE => ['required', 
+            self::ARRIVAL_DATE => ['required',
                 Rule::date()->format(self::DATE_FORMAT)->after(now()),
                 new ValidFlightTimeRule()],
         ];

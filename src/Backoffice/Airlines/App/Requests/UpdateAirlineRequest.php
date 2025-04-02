@@ -15,6 +15,8 @@ class UpdateAirlineRequest extends FormRequest
 {
     public const NAME = 'name';
 
+    public const DESCRIPTION = 'name';
+
     public const ENABLED_CITIES_IDS = 'enabled_cities_ids';
 
     public const FLIGHT_IDS = 'flight_ids';
@@ -40,9 +42,10 @@ class UpdateAirlineRequest extends FormRequest
     public function toDto(): AirlineDto
     {
         return new AirlineDto(
-            name: $this->string(self::NAME)->toString(),
-            enabled_cities_ids: $this->array(self::ENABLED_CITIES_IDS),
-            flight_ids: $this->array(self::FLIGHT_IDS)
+            name: $this->string(self::NAME)->toString() ?: null,
+            description: $this->string(self::DESCRIPTION)->toString() ?: null,
+            enabled_cities_ids: $this->array(self::ENABLED_CITIES_IDS) ?: null,
+            flight_ids: $this->array(self::FLIGHT_IDS) ?: null
         );
     }
 }

@@ -7,7 +7,6 @@ namespace Lightit\Backoffice\Flights\App\Rules;
 use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Carbon;
 use Illuminate\Translation\PotentiallyTranslatedString;
 use Lightit\Backoffice\Cities\Domain\Models\City;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
@@ -31,7 +30,9 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
     */
     protected array $data = [];
 
-    public function __construct(private readonly ?Flight $flight = null) {}
+    public function __construct(private readonly Flight|null $flight = null)
+    {
+    }
 
     public function setData(array $data): static
     {
@@ -52,7 +53,6 @@ class ValidFlightTimeRule implements DataAwareRule, ValidationRule
 
     private function checkValidFlightTimes(): bool
     {
-        
         $departure_city_id = $this->data[self::DEPARTURE_CITY_ID] ?? null;
         $arrival_city_id = $this->data[self::ARRIVAL_CITY_ID] ?? null;
 

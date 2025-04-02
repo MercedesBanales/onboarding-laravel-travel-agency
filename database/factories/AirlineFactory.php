@@ -19,6 +19,7 @@ class AirlineFactory extends Factory
     {
         return [
             'name' => fake()->company() . ' Airlines',
+            'description' => fake()->sentence()
         ];
     }
 

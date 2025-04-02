@@ -55,6 +55,8 @@ class UpdateFlightRequest extends FormRequest
         ];
     }
 
+
+    
     public function toDto(): FlightDto
     {
         return new FlightDto(

@@ -28,6 +28,8 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereUpdatedAt($value)
  * @property string $name
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereName($value)
+ * @property string $description
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereDescription($value)
  * @mixin \Eloquent
  */
 class Airline extends Model

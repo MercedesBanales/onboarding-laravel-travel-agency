@@ -8,7 +8,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class CityTable extends Component
+class Table extends Component
 {
     public function __construct()
     {
@@ -17,6 +17,6 @@ class CityTable extends Component
 
     public function render(): View|Closure|string
     {
-        return view('components.city-table');
+        return view('components.table');
     }
 }

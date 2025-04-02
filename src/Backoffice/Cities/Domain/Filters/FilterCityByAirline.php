@@ -19,11 +19,13 @@ class FilterCityByAirline implements Filter
     public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query
-            ->whereHas('departure_flights', function (Builder $query) use ($value) {
-                $query->where('airline_id', $value);
-            })
-            ->orWhereHas('arrival_flights', function (Builder $query) use ($value) {
-                $query->where('airline_id', $value);
-            });
+        ->whereHas('departure_flights', function (Builder $query) use ($value) {
+            $query->join('airlines', 'flights.airline_id', '=', 'airlines.id')
+                ->whereRaw('LOWER(airlines.name) LIKE ?', ['%' . strtolower($value) . '%']);
+        })
+        ->orWhereHas('arrival_flights', function (Builder $query) use ($value) {
+            $query->join('airlines', 'flights.airline_id', '=', 'airlines.id')
+                ->whereRaw('LOWER(airlines.name) LIKE ?', ['%' . strtolower($value) . '%']);
+        });
     }
 }

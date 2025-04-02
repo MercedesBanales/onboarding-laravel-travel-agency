@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Cities\App\Requests;
 
-use Carbon\CarbonTimeZone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use Lightit\Backoffice\Cities\Domain\DataTransferObjects\CityDto;
@@ -28,15 +27,10 @@ class StoreCityRequest extends FormRequest
     }
 
     public function toDto(): CityDto
-    {
-        /**
-         * @var CarbonTimeZone $timezone
-         */
-        $timezone = CarbonTimeZone::create($this->string(self::TIMEZONE)->toString());
-        
+    {  
         return new CityDto(
             name: $this->string(self::NAME)->toString(),
-            timezone: $timezone
+            timezone: $this->string(self::TIMEZONE)->toString(),
         );
     }
 }

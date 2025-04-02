@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -11,10 +11,10 @@
         @vite('resources/css/app.css')
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
     </head>
-    <body class="flex w-full items-start justify-center h-full">      
-        <div id="side-bar" class="flex flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white w-1/6 min-h-full">
+    <body class="flex w-full items-start justify-center">      
+        <div id="side-bar" class="flex flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white w-1/6">
             <button class="flex h-16 shrink-0 items-center px-4">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
@@ -59,12 +59,120 @@
               </ul>
             </nav>
           </div>
-          <div id="main-content" class="flex flex-col flex-1 bg-gray-100 min-h-full w-full gap-6">
+          <div id="main-content" class="flex flex-col flex-1 bg-gray-100 h-full w-full gap-4">
             {{  $slot }}
           </div>
+          <x-confirmation-dialog />
+          <x-error-notification />
+          <x-success-notification />
+
     </body>
 </html>
 
 <script>
-  
+   const openForm = (modalId) => {
+      $(modalId).show();
+    }
+
+    const closeForm = (modalId) => {
+      $(modalId).hide();
+    }
+
+    const getCities = (page=1, sort='', filter='', callback) => {
+      $.ajax({
+          url: `/api/cities?page=${page}&sort=${sort}&filter[airline_name]=${filter}`,
+          type: 'GET',
+          dataType: 'json',
+          success: function(response) {
+              callback(response);   
+          },
+          error: function(xhr, status, error) {
+              console.error('Error:', error);
+          }
+      });
+    };
+
+    function loadAirlines(page = 1) {
+        fetch(`/api/airlines?page=${page}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(response => {
+                let rows = '';
+                const totalPages = response.pagination.totalPages;
+                const airlines = response.data;
+                airlines.forEach(airline => {
+                    rows += createAirlineRow(airline);
+                });
+                document.getElementById('airline-table-body').innerHTML = rows;
+                updatePagination(page, totalPages);
+                })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+        
+    const openConfirmationDialog = (title, message, elementId) => {
+      $('#confirmation-dialog').show();
+      $('#confirmation-dialog').attr('elementId', elementId);
+      $('#delete-title').text(title);
+      $('#delete-message').text(message);
+    }
+
+    const closeConfirmationDialog = () => {
+      $('#confirmation-dialog').hide();
+    }
+
+    const showSuccessNotification = (successMessage) => {
+        $('#success-message').text(successMessage);
+        $('#success-notification')
+            .removeClass('translate-x-full opacity-0')
+            .addClass('translate-x-0 opacity-100');
+        setTimeout(() => {
+            closeSuccessNotification();
+        }, 6000);
+    }
+
+    const closeSuccessNotification = () => {
+        $('#success-notification')
+          .removeClass('translate-x-0 opacity-100')
+          .addClass('translate-x-full opacity-0');
+    };
+
+    const showErrorNotification = (error) => {
+      setErrorMessage(error);
+      $('#error-notification')
+          .removeClass('translate-x-full opacity-0')
+          .addClass('translate-x-0 opacity-100');
+      setTimeout(() => {
+          closeErrorNotification();
+      }, 6000);
+    };
+
+    const setErrorMessage = (error) => {
+      let errorMessage = error.message;
+      const numErrors = Object.keys(error.fields).length;
+      if (numErrors!==0) {
+        let errorMessage = `There were ${numErrors} errors with your submission`;
+        if (numErrors===1) errorMessage = `There was 1 error with your submission`;
+        $('#num-errors').text(errorMessage);
+
+        const errorsList = $('#errors-list');
+        let errors = '';
+        Object.entries(error.fields).forEach(([key, errorMessage]) => {
+          errors += `<li>${errorMessage}</li>`;
+        });
+        errorsList.html(errors);
+      }
+    }
+
+    const closeErrorNotification = () => {
+        $('#error-notification')
+          .removeClass('translate-x-0 opacity-100')
+          .addClass('translate-x-full opacity-0');
+    };
+
 </script>

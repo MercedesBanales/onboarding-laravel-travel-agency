@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @source "../views";
 
-.component-container.active {
-    display: block;
+html, body {
+    height: 100%; 
+    margin: 0; 
 }

@@ -14,6 +14,8 @@ class StoreAirlineRequest extends FormRequest
 {
     public const NAME = 'name';
 
+    public const DESCRIPTION = 'description';
+
     public const ENABLED_CITIES_IDS = 'enabled_cities_ids';
 
     /**
@@ -23,6 +25,7 @@ class StoreAirlineRequest extends FormRequest
     {
         return [
             self::NAME => ['required', Rule::unique(Airline::class)],
+            self::DESCRIPTION => ['required'],
             self::ENABLED_CITIES_IDS => [
                     'required',
                     Rule::array(), 'min:1',
@@ -34,6 +37,7 @@ class StoreAirlineRequest extends FormRequest
     {
         return new AirlineDto(
             name: $this->string(self::NAME)->toString(),
+            description: $this->string(self::DESCRIPTION)->toString(),
             enabled_cities_ids: $this->array(self::ENABLED_CITIES_IDS)
         );
     }

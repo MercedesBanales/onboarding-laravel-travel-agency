@@ -67,7 +67,7 @@ class City extends Model
         return $this->belongsToMany(Airline::class, 'airline_city', 'airline_id', 'city_id');
     }
 
-    public function dateToTimezone(string $date) : Carbon
+    public function dateToTimezone(string $date): Carbon
     {
         return Carbon::parse($date)->setTimezone($this->timezone);
     }
