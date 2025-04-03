@@ -15,7 +15,7 @@ class UpdateAirlineRequest extends FormRequest
 {
     public const NAME = 'name';
 
-    public const DESCRIPTION = 'name';
+    public const DESCRIPTION = 'description';
 
     public const ENABLED_CITIES_IDS = 'enabled_cities_ids';
 

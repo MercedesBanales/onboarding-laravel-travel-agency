@@ -1,4 +1,4 @@
-<div id="success-notification" class="z-10 fixed top-0 right-0 mt-4 mr-4 rounded-md bg-green-50 p-4 shadow-lg transition-transform transform translate-x-full opacity-0 duration-200 ease-in-out">
+<div id="success-notification" class="z-20 fixed top-0 right-0 mt-4 mr-4 rounded-md bg-green-50 p-4 shadow-lg transition-transform transform translate-x-full opacity-0 duration-200 ease-in-out">
     <div class="flex">
       <div class="shrink-0">
         <svg class="size-5 text-green-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">

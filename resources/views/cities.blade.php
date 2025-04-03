@@ -1,11 +1,11 @@
 <x-layout.layout>
     <div class="flex w-full justify-end px-4 sm:px-6 lg:px-8 lg:pt-6">
       <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-        <button type="button" onclick="openForm('#create-city-modal')" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        <button type="button" onclick="openForm('create-city-modal')" class="block rounded-md bg-indigo-600 px-3 py-2 text-center text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
           Create city
         </button>
       </div>
-      </div>
+    </div>
     <div class="px-4 sm:px-6 lg:px-8">
       <div class="-mr-px grid grow grid-cols-1 focus-within:relative">
         <input type="text" name="query" id="query" onkeyup="filterByAirline()" class="col-start-1 row-start-1 block w-full rounded-l-md bg-white py-1.5 pr-3 pl-10 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:pl-9 sm:text-sm/6" placeholder="Airline name">
@@ -21,14 +21,6 @@
 <x-city.edit-form />
 
 <script>
-    function debounce(func, timeout = 300){
-      let timer;
-      return (...args) => {
-        clearTimeout(timer);
-        timer = setTimeout(() => { func.apply(this, args); }, timeout);
-      };
-    }
-
     const filterByAirline = debounce(() => {
       const airlineName = document.getElementById('query').value ?? '';
       const currentPage = parseInt($('#city-table-component').attr('current-page'))
@@ -43,11 +35,6 @@
         const sortCriteria = $('#city-table-component').attr('sort-criteria')
         const filterCriteria = $('#city-table-component').attr('filter-criteria')
         loadCities(currentPage, sortCriteria, filterCriteria);
-        showSuccessNotification("City successfully created.");
-    }
-    
-    const clearFormFields = (formId) => {
-      $(formId).find('input').val('');
     }
     
 </script>

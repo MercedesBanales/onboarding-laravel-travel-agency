@@ -1,11 +1,9 @@
 <x-table id="airline-table-component" :bodyId="'airline-table-body'">
     @slot('sortById')
     @endslot
-    
-    @slot('sortByName')
-    @endslot
 
     @slot('remainingColumns')
+        <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Description</th>
         <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Number of Flights</th>
     @endslot
@@ -20,7 +18,7 @@
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${airline.description}</td>
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${airline.flights.length}</td>
             <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                <button class="text-indigo-600 hover:text-indigo-900">Edit</button>
+                <button class="text-indigo-600 hover:text-indigo-900 edit-airline-btn" data-airline='${JSON.stringify(airline).replace(/'/g, "&apos;")}'>Edit</button>
             </td>
             <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                 <button class="text-indigo-600 hover:text-indigo-900" onclick="handleAirlineDelete(${airline.id}, '${airline.name}')">Delete</button>
@@ -64,14 +62,23 @@
         `;
     }
 
-    function handleEdit() {
+    $(document).ready(function() {
+        $(document).on("click", ".edit-airline-btn", function() {
+            const airline = JSON.parse($(this).attr("data-airline"));
+            handleAirlineEdit(airline);
+        });
+        
+        loadAirlines(1, '');
+    });
+
+    function handleAirlineEdit(airline) {
+        loadOptions('#options-body-edit', airline.enabled_cities);
+        openForm('edit-airline-modal');
+        $('#edit-airline-form').attr('action', `/api/airlines/${airline.id}`);
+        $('#edit-airline-name').attr('placeholder', airline.name);
+        $('#edit-airline-description').attr('placeholder', airline.description);
 
     }
-
-    $(document).ready(function() {
-    loadAirlines();
-
-});
 
 const handleAirlineDelete = (airlineId, airlineName) => {
       const title = `Delete ${airlineName}`;

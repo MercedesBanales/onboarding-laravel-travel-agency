@@ -13,21 +13,24 @@
       </span>
     </button>
   @endslot
-  @slot('sortByName')
-    <button id="name-sort" class="flex" onclick="handleSort('name')" data-state="unsorted">
-      <span id="name-not-sorted"  class="ml-2 flex-none rounded-sm bg-gray-100 text-gray-900 group-hover:bg-gray-200">
-        <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
-          <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
-        </svg>                      
-      </span>
-      <span id="name-sorted" class="ml-2 flex-none rounded-sm bg-gray-100 text-gray-900 group-hover:bg-gray-200 hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
-          <path fill-rule="evenodd" d="M9.47 6.47a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06L10 8.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06l4.25-4.25Z" clip-rule="evenodd" />
-        </svg>
-      </span>
-    </button>
-  @endslot
   @slot('remainingColumns')
+    <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+      <div class="flex">
+      Name
+      <button id="name-sort" class="flex" onclick="handleSort('name')" data-state="unsorted">
+        <span id="name-not-sorted"  class="ml-2 flex-none rounded-sm bg-gray-100 text-gray-900 group-hover:bg-gray-200">
+          <svg class="size-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+          </svg>                      
+        </span>
+        <span id="name-sorted" class="ml-2 flex-none rounded-sm bg-gray-100 text-gray-900 group-hover:bg-gray-200 hidden">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="size-5">
+            <path fill-rule="evenodd" d="M9.47 6.47a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 1 1-1.06 1.06L10 8.06l-3.72 3.72a.75.75 0 0 1-1.06-1.06l4.25-4.25Z" clip-rule="evenodd" />
+          </svg>
+        </span>
+      </button>
+    </div>
+    </th>
     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Number of incoming flights</th>
     <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Number of outgoing flights</th>
   @endslot
@@ -128,7 +131,7 @@
     }
 
     const handleEdit = (cityId, cityName, cityTimezone) => {
-      openForm('#edit-city-modal');
+      openForm('edit-city-modal');
       $('#edit-city-form').attr('action', `/api/cities/${cityId}`);
       $('#edit-city-name').attr('placeholder', cityName);
       $('#edit-city-timezone').attr('placeholder', cityTimezone);

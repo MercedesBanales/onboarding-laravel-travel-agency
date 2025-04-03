@@ -12,6 +12,8 @@
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     </head>
     <body class="flex w-full items-start justify-center">      
         <div id="side-bar" class="flex flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white w-1/6">
@@ -70,15 +72,15 @@
 </html>
 
 <script>
-   const openForm = (modalId) => {
-      $(modalId).show();
+    const openForm = (modalId) => {
+        $(`#${modalId}`).show();
     }
 
     const closeForm = (modalId) => {
-      $(modalId).hide();
+        $(`#${modalId}`).hide();
     }
 
-    const getCities = (page=1, sort='', filter='', callback) => {
+    const getCities = (page=null, sort='', filter='', callback) => {
       $.ajax({
           url: `/api/cities?page=${page}&sort=${sort}&filter[airline_name]=${filter}`,
           type: 'GET',
@@ -93,7 +95,13 @@
     };
 
     function loadAirlines(page = 1) {
-        fetch(`/api/airlines?page=${page}`)
+      const cityIdFilter = parseInt($('#airline-table-component').attr('city-id-filter'));
+      const numActiveFlightsFilter = parseInt($('#airline-table-component').attr('num-active-flights-filter'));
+      let url = `/api/airlines?page=${page}`;
+      if (cityIdFilter) url += `&filter[city_id]=${cityIdFilter}`;
+      if (numActiveFlightsFilter || numActiveFlightsFilter === 0) url += `&filter[num_active_flights]=${numActiveFlightsFilter}`;
+    
+      fetch(url)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -114,6 +122,26 @@
                 console.error('Error:', error);
             });
     }
+
+    function loadFlights(page=1) {
+      axios.get(`/api/flights?page=${page}`, { responseType: "json" })
+          .then(response => {
+              let rows = '';
+              const totalPages = response.data.pagination.totalPages;
+              const flights = response.data.data;
+
+              flights.forEach(flight => {
+                  rows += createFlightRow(flight);
+              });
+
+              document.getElementById('flight-table-body').innerHTML = rows;
+              updatePagination(page, totalPages); 
+          })
+          .catch(err => {
+              console.error('Error:', err);
+          });
+      }
+
         
     const openConfirmationDialog = (title, message, elementId) => {
       $('#confirmation-dialog').show();
@@ -175,4 +203,15 @@
           .addClass('translate-x-full opacity-0');
     };
 
+    const clearFormFields = (formId) => {
+      $(formId).find('input').val('');
+    }
+
+    function debounce(func, timeout = 300){
+      let timer;
+      return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => { func.apply(this, args); }, timeout);
+      };
+    }
 </script>

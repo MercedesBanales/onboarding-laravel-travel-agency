@@ -9,8 +9,8 @@ readonly class AirlineDto
     public function __construct(
         public string|null $name,
         public string|null $description,
-        public array $enabled_cities_ids = [],
-        public array $flight_ids = [],
+        public array|null $enabled_cities_ids = [],
+        public array|null $flight_ids = [],
     ) {
     }
 }

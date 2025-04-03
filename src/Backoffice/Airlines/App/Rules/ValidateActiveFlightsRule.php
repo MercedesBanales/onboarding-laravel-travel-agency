@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Airlines\App\Rules;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Support\Carbon;
 use Illuminate\Translation\PotentiallyTranslatedString;
 use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 use Lightit\Backoffice\Cities\Domain\Models\City;
@@ -54,7 +54,7 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
             /**
              * @var City $arrival_city
              */
-            $arrival_city = $flight->arrival_city;
+            $arrival_city = City::findOrFail($flight->arrival_city_id);
             $arrival_date = $arrival_city->dateToTimezone($flight->arrival_date);
             if ($this->flightIsActive($arrival_date) && ! $this->flightIsEnabledByAirline($flight, $value)) {
                 $fail(self::ERROR_MESSAGE);
@@ -73,6 +73,6 @@ class ValidateActiveFlightsRule implements DataAwareRule, ValidationRule
     private function flightIsEnabledByAirline(Flight $flight, array $value): bool
     {
         return in_array($flight->departure_city_id, $value)
-            && in_array($flight->arrival_city_id, $value);
+            || in_array($flight->arrival_city_id, $value);
     }
 }
