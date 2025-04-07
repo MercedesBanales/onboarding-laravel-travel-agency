@@ -39,20 +39,24 @@
   <script>
     const allSortCriteria = ['id', 'name'];
 
-    function loadCities(page = 1, sort = '', filter = '') {
-      getCities(page, sort, filter, function(response) {
-          let rows = '';
-          const totalPages = response.pagination.totalPages;
+    async function loadCities(page = 1, sort = '', filter = '') {
+    try {
+        const response = await getCities(page, sort, filter); 
 
-          response.data.forEach(city => {
-              rows += createCityRow(city);
-          });
+        let rows = '';
+        const totalPages = response.pagination.totalPages;
 
-          $('#city-table-body').html(rows);
-          $('#city-table-component').attr('current-page', page);
-          updatePagination(page, totalPages, sort);
-      });
+        response.data.forEach(city => {
+            rows += createCityRow(city);
+        });
+
+        $('#city-table-body').html(rows);
+        $('#city-table-component').attr('current-page', page);
+        updatePagination(page, totalPages, sort);
+    } catch (error) {
+        console.error('Error cargando ciudades:', error);
     }
+}
 
     function createCityRow(city) {
       return `

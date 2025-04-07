@@ -8,8 +8,8 @@ use Lightit\Shared\App\Exceptions\InvalidActionException;
 
 Route::get('invalid', static fn() => throw new InvalidActionException("Is not valid"));
 
-Route::get('/cities', static fn () => view('cities'))->name('cities');
-Route::get('/airlines', static fn () => view('airlines'))->name('airlines');
-Route::get('/flights', static fn () => view('flights'))->name('flights');
-Route::get('{unknown}', static fn () => view('welcome'))->where('unknown', '^(?!api).*$');
+Route::get('/cities', static fn () => view('cities.index'))->name('cities');
+Route::get('/airlines', static fn () => view('airlines.index'))->name('airlines');
+Route::get('/flights', static fn () => view('flights.index'))->name('flights');
+Route::get('{unknown}', static fn () => view('404'))->where('unknown', '^(?!api).*$');
 

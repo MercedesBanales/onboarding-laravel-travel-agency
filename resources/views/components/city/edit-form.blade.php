@@ -55,7 +55,6 @@
               contentType: false, 
               processData: false,
               success: function(response) {
-                console.log('entre')
                 handleSubmit('City successfully updated');
                 $('#edit-city-name').attr('placeholder', response.data.name);
                 $('#edit-city-timezone').attr('placeholder', response.data.timezone);

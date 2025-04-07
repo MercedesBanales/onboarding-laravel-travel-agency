@@ -58,6 +58,8 @@
             loadCities();
         } else if (entity==='Airline') {
             loadAirlines()
+        } else {
+            loadFlights();
         }
         closeConfirmationDialog();
         showSuccessNotification(`${entity} successfully deleted`);

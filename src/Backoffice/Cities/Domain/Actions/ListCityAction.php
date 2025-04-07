@@ -17,7 +17,7 @@ class ListCityAction
     /**
      * @return LengthAwarePaginator<Model>|Collection<int, Model>
      */
-    public function execute(?int $page=null): LengthAwarePaginator|Collection
+    public function execute(int|null $page = null): LengthAwarePaginator|Collection
     {
         $query = QueryBuilder::for(City::class)
             ->allowedFilters([
@@ -27,6 +27,7 @@ class ListCityAction
             ->with('arrival_flights');
         
         if ($page) return $query->paginate(5);
+
         return $query->get();
     }
 }

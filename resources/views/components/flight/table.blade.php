@@ -18,23 +18,41 @@
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                 <div class="flex flex-col">
                     <label>${flight.departure_city.name}</label>
-                    <label>${flight.departure_date}
+                    <label>${formatDate(flight.departure_date)} | ${formatTime(flight.departure_date)}</label>
                 </div>
             </td>
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                  <div class="flex flex-col">
                     <label>${flight.arrival_city.name}</label>
-                    <label>${flight.arrival_date}
+                    <label>${formatDate(flight.arrival_date)} | ${formatTime(flight.arrival_date)}</label>
                 </div>
             </td>
             <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                <button class="text-indigo-600 hover:text-indigo-900 edit-airline-btn" data-flight='${JSON.stringify(flight).replace(/'/g, "&apos;")}'>Edit</button>
+                <button class="text-indigo-600 hover:text-indigo-900 edit-flight-btn" data-flight='${JSON.stringify(flight).replace(/'/g, "&apos;")}'>Edit</button>
             </td>
             <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
-                <button class="text-indigo-600 hover:text-indigo-900">Delete</button>
+                <button class="text-indigo-600 hover:text-indigo-900" onclick="handleFlightDelete(${flight.id})">Delete</button>
             </td>
           </tr>
         `
+    }
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-GB', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+        }).replace(/\//g, '-'); 
+    }
+
+    function formatTime(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleTimeString('en-GB', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false 
+        });
     }
 
     function updatePagination(currentPage, totalPages, sortCriteria) {
@@ -76,5 +94,32 @@
     $(document).ready(function() {
         loadFlights();
     });
+
+    $(document).on("click", ".edit-flight-btn", function() {
+            const flight = JSON.parse($(this).attr("data-flight"));
+            handleFlightEdit(flight);
+    });
+
+    async function handleFlightEdit(flight) {
+        selectedAirline = null;
+        selectedOrigin = null;
+        selectedDestination = null;
+        openForm('edit-flight-modal');
+        $('#edit-flight-form').attr('action', `/api/flights/${flight.id}`);
+        await selectOption("airline", flight.airline.id, flight.airline.name, 'edit');
+        await selectOption("origin", flight.departure_city.id, flight.departure_city.name, 'edit');
+        await selectOption("destination", flight.arrival_city.id, flight.arrival_city.name, 'edit');
+        $('#edit-departure-date').val(flight.departure_date);
+        $('#edit-arrival-date').val(flight.arrival_date);
+        updateInputState('#edit-departure-date');
+        updateInputState('#edit-arrival-date');
+    }
+
+    const handleFlightDelete = (flightId) => {
+      const title = `Delete ${flightId}`;
+      const message = "Are you sure you want to delete this flight? It will be permanently removed from our servers. This action cannot be undone."
+      $('#confirmation-dialog').attr('url', 'flights');
+      openConfirmationDialog(title, message, flightId);
+    }
 
 </script>

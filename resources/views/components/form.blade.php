@@ -5,7 +5,7 @@
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
       <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
         <div class="relative transform overflow rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-            <div class="flex flex-col gap-6">
+            <div class="flex flex-col gap-8">
             <h2 class="text-3xl font-semibold">{{ $title }}</h2>
             <form id="{{ $formId }}" name="{{ $formName }}" class="bg-white" action="{{ $action }}" method="POST">
                 @csrf

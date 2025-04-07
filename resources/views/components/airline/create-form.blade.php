@@ -55,21 +55,19 @@
                 </div>`;
     }
 
-    const loadOptions = (optionsBodyId, enabledCities=null) => {
-        getCities(null, '', '', function(response) {
-          let options = '';
-
-          response.data.forEach(city => {
+    const loadOptions = async (optionsBodyId, enabledCities=null) => {
+        const response = await getCities(null, '', '');
+        let options = '';
+        response.data.forEach(city => {
             const cityIsEnabled = enabledCities && enabledCities.some(c => c.id === city.id);
             options += setOption(city, cityIsEnabled);
-          });
-
-          $(optionsBodyId).html(options);
-      });
+        });
+        
+        $(optionsBodyId).html(options); 
     }
 
-    $(document).ready(function() {
-        loadOptions('#options-body-create');
+    $(document).ready(async function() {
+        await loadOptions('#options-body-create');
 
         $.validator.setDefaults({
             ignore: []

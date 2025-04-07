@@ -1,4 +1,4 @@
-<div id="error-notification" class="z-20 fixed top-0 right-0 mt-4 mr-4 rounded-md bg-red-50 p-4 shadow-lg transition-transform transform translate-x-full opacity-0 duration-200 ease-in-out">
+<div id="error-notification" class="z-20 fixed top-0 right-0 mt-4 mr-4 max-w-sm break-words rounded-md bg-red-50 p-4 shadow-lg transition-transform transform translate-x-full opacity-0 duration-200 ease-in-out">
   <div class="flex">
     <div class="shrink-0">
       <button onclick="closeErrorNotification()">

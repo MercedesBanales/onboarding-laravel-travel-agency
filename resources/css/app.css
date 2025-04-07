@@ -1,7 +1,12 @@
 @import "tailwindcss";
 @source "../views";
+@source "../node_modules/flowbite-datepicker";
 
 html, body {
     height: 100%; 
     margin: 0; 
 }
+
+.collapsed .sidebar-label {
+    display: none;
+  }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Flights\Domain\Actions;
 
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
