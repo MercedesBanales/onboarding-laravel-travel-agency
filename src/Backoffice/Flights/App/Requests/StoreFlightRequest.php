@@ -85,8 +85,8 @@ class StoreFlightRequest extends FormRequest
         $departureCityId = $this->integer(self::DEPARTURE_CITY_ID);
         $arrivalCityId = $this->integer(self::ARRIVAL_CITY_ID);
 
-        return ($departureCityId && $enabledCities->contains($departureCityId))
-        && ($arrivalCityId && $enabledCities->contains($arrivalCityId));
+        return $enabledCities->contains($departureCityId)
+        && $enabledCities->contains($arrivalCityId);
     }
 
     private function validFlightDateTimes(): bool

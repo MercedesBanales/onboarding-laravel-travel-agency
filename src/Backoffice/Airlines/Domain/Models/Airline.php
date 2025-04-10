@@ -11,8 +11,6 @@ use Lightit\Backoffice\Cities\Domain\Models\City;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 /**
- * 
- *
  * @property int                             $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -20,16 +18,22 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
  * @property-read int|null $enabled_cities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $flights
  * @property-read int|null $flights_count
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline query()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereUpdatedAt($value)
+ *
  * @property string $name
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereName($value)
+ *
  * @property string $description
+ *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Airline whereDescription($value)
+ *
  * @mixin \Eloquent
  */
 class Airline extends Model
