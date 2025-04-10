@@ -23,10 +23,12 @@ class ListCityAction
             ->allowedFilters([
                 AllowedFilter::callback('airline_name', new FilterCityByAirline())])
             ->allowedSorts('id', 'name')
-            ->with('departure_flights')
-            ->with('arrival_flights');
+            ->with('departureFlights')
+            ->with('arrivalFlights');
         
-        if ($page) return $query->paginate(5);
+        if ($page) {
+            return $query->paginate(5);
+        }
 
         return $query->get();
     }

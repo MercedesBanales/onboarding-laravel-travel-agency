@@ -17,14 +17,14 @@
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${flight.airline.name}</td>
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                 <div class="flex flex-col">
-                    <label>${flight.departure_city.name}</label>
-                    <label>${formatDate(flight.departure_date)} | ${formatTime(flight.departure_date)}</label>
+                    <label>${flight.departureCity.name}</label>
+                    <label>${flight.departure_date}</label>
                 </div>
             </td>
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">
                  <div class="flex flex-col">
-                    <label>${flight.arrival_city.name}</label>
-                    <label>${formatDate(flight.arrival_date)} | ${formatTime(flight.arrival_date)}</label>
+                    <label>${flight.arrivalCity.name}</label>
+                    <label>${flight.arrival_date}</label>
                 </div>
             </td>
             <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
@@ -37,34 +37,15 @@
         `
     }
 
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        }).replace(/\//g, '-'); 
-    }
-
-    function formatTime(dateString) {
-        const date = new Date(dateString);
-        return date.toLocaleTimeString('en-GB', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false 
-        });
-    }
-
-    function updatePagination(currentPage, totalPages, sortCriteria) {
-      const paginationComponent = $('#pagination-component');
-      const filterCriteria = $('#city-table-component').attr('filter-criteria') ?? ''
+    function updatePagination(currentPage, totalPages) {
+      const paginationComponent = document.getElementById('pagination-component');
 
       let pageLinks = '';
       for (let i = 1; i <= totalPages; i++) {
         pageLinks += `<button class="inline-flex items-center border-t-2 ${i === currentPage ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} px-4 pt-4 text-sm font-medium" onclick="loadFlights(${i})">${i}</button>`;
       }      
       
-      paginationComponent.html(`
+      paginationComponent.innerHTML = `
             <div class="-mt-px flex w-0 flex-1">
             <button onclick="loadFlights(${currentPage - 1})" 
                     class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 ${currentPage === 1 ? 'disabled:text-gray-300 cursor-not-allowed' : ''}" 
@@ -88,7 +69,7 @@
                     </svg>
                 </button>
             </div>
-        `);
+        `;
     }
 
     $(document).ready(function() {
@@ -107,12 +88,18 @@
         openForm('edit-flight-modal');
         $('#edit-flight-form').attr('action', `/api/flights/${flight.id}`);
         await selectOption("airline", flight.airline.id, flight.airline.name, 'edit');
-        await selectOption("origin", flight.departure_city.id, flight.departure_city.name, 'edit');
-        await selectOption("destination", flight.arrival_city.id, flight.arrival_city.name, 'edit');
-        $('#edit-departure-date').val(flight.departure_date);
-        $('#edit-arrival-date').val(flight.arrival_date);
+        await selectOption("origin", flight.departureCity.id, flight.departureCity.name, 'edit');
+        await selectOption("destination", flight.arrivalCity.id, flight.arrivalCity.name, 'edit');
+        $('#edit-departure-date').val(formatFlightDate(flight.departure_date));
+        $('#edit-arrival-date').val(formatFlightDate(flight.arrival_date));
         updateInputState('#edit-departure-date');
         updateInputState('#edit-arrival-date');
+    }
+
+    const formatFlightDate = (date) => {
+        let dateParts = date.split(' ')[0].split('-');
+        let timeParts = date.split(' ')[1].split(':'); 
+        return `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}T${timeParts[0]}:${timeParts[1]}`;
     }
 
     const handleFlightDelete = (flightId) => {

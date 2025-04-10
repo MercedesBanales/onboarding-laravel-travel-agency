@@ -12,7 +12,7 @@ use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 use Lightit\Backoffice\Flights\Domain\Models\Flight;
 
 /**
- * 
+ * Lightit\Backoffice\Cities\Domain\Models\City
  *
  * @property int                             $id
  * @property string                          $name
@@ -25,9 +25,9 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|City whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|City whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|City whereUpdatedAt($value)
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $arrival_flights
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $arrivalFlights
  * @property-read int|null $arrival_flights_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $departure_flights
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $departureFlights
  * @property-read int|null $departure_flights_count
  * @property string $timezone
  * @method static \Illuminate\Database\Eloquent\Builder<static>|City whereTimezone($value)
@@ -46,7 +46,7 @@ class City extends Model
     /**
      * @return HasMany<Flight, $this>
     */
-    public function departure_flights(): HasMany
+    public function departureFlights(): HasMany
     {
         return $this->hasMany(Flight::class, 'departure_city_id');
     }
@@ -54,7 +54,7 @@ class City extends Model
     /**
      * @return HasMany<Flight, $this>
     */
-    public function arrival_flights(): HasMany
+    public function arrivalFlights(): HasMany
     {
         return $this->hasMany(Flight::class, 'arrival_city_id');
     }
@@ -69,6 +69,6 @@ class City extends Model
 
     public function dateToTimezone(string $date): Carbon
     {
-        return Carbon::parse($date)->setTimezone($this->timezone);
+        return Carbon::parse($date, $this->timezone);
     }
 }

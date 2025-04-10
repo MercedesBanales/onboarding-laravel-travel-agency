@@ -38,7 +38,7 @@ class StoreAirlineRequest extends FormRequest
         return new AirlineDto(
             name: $this->string(self::NAME)->toString(),
             description: $this->string(self::DESCRIPTION)->toString(),
-            enabled_cities_ids: $this->array(self::ENABLED_CITIES_IDS)
+            enabledCitiesIds: $this->array(self::ENABLED_CITIES_IDS)
         );
     }
 }

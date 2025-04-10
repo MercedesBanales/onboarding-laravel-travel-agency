@@ -6,10 +6,9 @@ namespace Lightit\Backoffice\Flights\App\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 use Lightit\Backoffice\Airlines\Domain\Models\Airline;
 use Lightit\Backoffice\Cities\Domain\Models\City;
-use Lightit\Backoffice\Flights\App\Rules\EnabledFlightRule;
-use Lightit\Backoffice\Flights\App\Rules\ValidFlightTimeRule;
 use Lightit\Backoffice\Flights\Domain\DataTransferObjects\FlightDto;
 
 class StoreFlightRequest extends FormRequest
@@ -33,29 +32,88 @@ class StoreFlightRequest extends FormRequest
     {
         return [
             self::AIRLINE_ID => [
+                'bail',
                 'required',
-                Rule::exists(Airline::class, 'id'),
-                new EnabledFlightRule()],
-            self::DEPARTURE_CITY_ID => ['required', Rule::exists(City::class, 'id')],
-            self::ARRIVAL_CITY_ID => ['required', Rule::exists(
+                Rule::exists(Airline::class, 'id')],
+            self::DEPARTURE_CITY_ID => ['bail', 'required', Rule::exists(City::class, 'id')],
+            self::ARRIVAL_CITY_ID => ['bail', 'required', Rule::exists(
                 City::class,
                 'id'
             ), 'different:' . self::DEPARTURE_CITY_ID],
-            self::DEPARTURE_DATE => ['required', Rule::date()->format(self::DATE_FORMAT)->after(now())],
-            self::ARRIVAL_DATE => ['required',
-                Rule::date()->format(self::DATE_FORMAT)->after(now()),
-                new ValidFlightTimeRule()],
+            self::DEPARTURE_DATE => ['bail', 'required', Rule::date()->format(self::DATE_FORMAT)->after(now())],
+            self::ARRIVAL_DATE => ['bail', 'required',
+                Rule::date()->format(self::DATE_FORMAT)->after(now())],
         ];
+    }
+
+    public function after(): array
+    {
+        return [
+            function (Validator $validator) {
+                if (! $this->airlineEnablesFlightCities()) {
+                    $this->setError(
+                        $validator,
+                        'airline_id',
+                        "The airline's current flights are not enabled by the updated cities."
+                    );
+                }
+
+                if (! $this->validFlightDatetimes()) {
+                    $this->setError(
+                        $validator,
+                        'arrival_date',
+                        'The arrival date and time cannot be before the departure date and time.'
+                    );
+                }
+            },
+        ];
+    }
+
+    private function setError(Validator $validator, string $field, string $errorMessage): void
+    {
+        $validator->errors()->add(
+            $field,
+            $errorMessage
+        );
+    }
+
+    private function airlineEnablesFlightCities(): bool
+    {
+        $airline = Airline::findOrFail($this->integer(self::AIRLINE_ID));
+        $enabledCities = $airline->enabledCities->pluck('id');
+        
+        $departureCityId = $this->integer(self::DEPARTURE_CITY_ID);
+        $arrivalCityId = $this->integer(self::ARRIVAL_CITY_ID);
+
+        return ($departureCityId && $enabledCities->contains($departureCityId))
+        && ($arrivalCityId && $enabledCities->contains($arrivalCityId));
+    }
+
+    private function validFlightDateTimes(): bool
+    {
+        $departureCityId = $this->integer(self::DEPARTURE_CITY_ID);
+        $arrivalCityId = $this->integer(self::ARRIVAL_CITY_ID);
+
+        $departureCity = City::findOrFail($departureCityId);
+        $arrivalCity = City::findOrFail($arrivalCityId);
+
+        $departureDate = $this->string(self::DEPARTURE_DATE)->toString();
+        $arrivalDate = $this->string(self::ARRIVAL_DATE)->toString();
+
+        $departureDateToTz = $departureCity->dateToTimezone($departureDate);
+        $arrivalDateToTz = $arrivalCity->dateToTimezone($arrivalDate);
+
+        return $departureDateToTz->lessThan($arrivalDateToTz);
     }
 
     public function toDto(): FlightDto
     {
         return new FlightDto(
-            airline_id: $this->integer(self::AIRLINE_ID),
-            departure_city_id: $this->integer(self::DEPARTURE_CITY_ID),
-            arrival_city_id: $this->integer(self::ARRIVAL_CITY_ID),
-            departure_date: $this->date(self::DEPARTURE_DATE),
-            arrival_date: $this->date(self::ARRIVAL_DATE)
+            airlineId: $this->integer(self::AIRLINE_ID),
+            departureCityId: $this->integer(self::DEPARTURE_CITY_ID),
+            arrivalCityId: $this->integer(self::ARRIVAL_CITY_ID),
+            departureDate: $this->date(self::DEPARTURE_DATE),
+            arrivalDate: $this->date(self::ARRIVAL_DATE)
         );
     }
 }

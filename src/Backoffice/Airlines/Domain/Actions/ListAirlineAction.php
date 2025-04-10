@@ -19,16 +19,19 @@ class ListAirlineAction
     /**
      * @return LengthAwarePaginator<Model>|Collection<int, Model>
     */
-    public function execute(?int $page=null): LengthAwarePaginator | Collection
+    public function execute(int|null $page = null): LengthAwarePaginator|Collection
     {
         $query = QueryBuilder::for(Airline::class)
             ->allowedFilters([
                 AllowedFilter::callback('num_active_flights', new FilterAirlineByActiveFlights()),
                 AllowedFilter::callback('city_id', new FilterAirlineByCity())])
-            ->with('enabled_cities')
+            ->with('enabledCities')
             ->with('flights');
         
-        if ($page) return $query->paginate(5);
+        if ($page) {
+            return $query->paginate(5);
+        }
+
         return $query->get();
     }
 }

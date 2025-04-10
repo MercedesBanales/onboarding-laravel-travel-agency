@@ -60,7 +60,7 @@ $(document).ready(async function() {
     populateOriginDropdown(cities, 'create');
     populateDestinationDropdown(cities, 'create');
 
-    $('#departure-date, #arrival-date').on('change input focus blur keyup', function() {
+    $('#create-departure-date, #create-arrival-date').on('change input focus blur keyup', function() {
         updateInputState(this);
     });
 
@@ -119,15 +119,20 @@ $(document).ready(async function() {
 
 const handleCreateFlight = () => {
     loadFlights();
-    resetFields();
+    resetFields('create');
     closeForm('create-flight-modal');
-    showSuccessNotification('Flight successfully created.')
+    showSuccessNotification('Flight successfully created.');
 }
 
-const resetFields = () => {
+const resetFields = (formType) => {
     selectedAirline = null;
     selectedOrigin = null;
     selectedDestination = null;
+    unselectOption('airline', 'create-flight-airline-btn', formType);
+    unselectOption('origin', 'create-flight-origin-btn', formType);
+    unselectOption('destination', 'create-flight-destination-btn', formType);
+    $(`#${formType}-departure-date`).val('');
+    $(`#${formType}-arrival-date`).val('');
 }
 </script>
 

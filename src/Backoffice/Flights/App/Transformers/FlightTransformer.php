@@ -20,10 +20,16 @@ class FlightTransformer extends Transformer
         return [
             'id' => $flight->id,
             'airline' => $flight->airline,
-            'departure_city' => $flight->departure_city,
-            'arrival_city' => $flight->arrival_city,
-            'departure_date' => $flight->departure_date,
-            'arrival_date' => $flight->arrival_date,
+            'departureCity' => $flight->departureCity,
+            'arrivalCity' => $flight->arrivalCity,
+            'departure_date' => $flight->departureCity->dateToTimezone(
+                $flight->departure_date->toDateString()
+            )->format(
+                'd-m-Y H:i:s'
+            ),
+            'arrival_date' => $flight->arrivalCity->dateToTimezone($flight->arrival_date->toDateString())->format(
+                'd-m-Y H:i:s'
+            ),
         ];
     }
 }

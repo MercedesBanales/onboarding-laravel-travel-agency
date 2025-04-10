@@ -76,21 +76,8 @@
     }
 
     const selectAirline = async (id, name, formType) => {
-        const response = await fetch(`api/airlines/${id}`)
-          .then(response => {
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              return response.json();
-          })
-          .catch(error => {
-              console.error('Error:', error);
-              throw error; 
-          });
-    
-        const airline = response.data;
-        selectedAirline = airline;
         const airlines = await getAllAirlines();
+        selectedAirline = airlines.find(airline => airline.id === id);
         const filteredAirlines = airlines.filter(airline => airline.id !== id)
         populateAirlineDropdown(filteredAirlines, formType);
         if (selectedOrigin) {        
@@ -104,12 +91,12 @@
             unselectOption('destination', buttonId, formType);
             $(`#${formType}-flight-destination-options-div`).addClass('hidden');
         }
-        populateOriginDropdown(airline.enabled_cities, formType);
-        populateDestinationDropdown(airline.enabled_cities, formType);
+        populateOriginDropdown(selectedAirline.enabledCities, formType);
+        populateDestinationDropdown(selectedAirline.enabledCities, formType);
     }
 
     const selectOrigin = async (id, name, formType) => {
-        let cities = selectedAirline?.enabled_cities ?? await getAllCities();
+        let cities = selectedAirline?.enabledCities ?? await getAllCities();
         selectedOrigin = id;
         const filteredCities = cities.filter(city => city.id !== id && city.id !== selectedDestination);
         populateOriginDropdown(filteredCities, formType);
@@ -117,7 +104,7 @@
     }
 
     const selectDestination = async (id, name, formType) => {
-        let cities = selectedAirline?.enabled_cities ?? await getAllCities();
+        let cities = selectedAirline?.enabledCities ?? await getAllCities();
         selectedDestination = id;
         const filteredCities = cities.filter(city => city.id !== id && city.id !== selectedOrigin);
         populateOriginDropdown(filteredCities, formType);
@@ -142,7 +129,7 @@
     }
 
     const unselectOrigin = async (formType) => {
-        const cities = selectedAirline?.enabled_cities ?? await getAllCities();
+        const cities = selectedAirline?.enabledCities ?? await getAllCities();
         const filteredCities = cities.filter(city => city.id !== selectedDestination)
         selectedOrigin = null;
         populateOriginDropdown(filteredCities, formType);
@@ -150,7 +137,7 @@
     }
 
     const unselectDestination = async (formType) => {
-        const cities = selectedAirline?.enabled_cities ?? await getAllCities();
+        const cities = selectedAirline?.enabledCities ?? await getAllCities();
         const filteredCities = cities.filter(city => city.id !== selectedOrigin)
         selectedDestination = null;
         populateOriginDropdown(filteredCities, formType);

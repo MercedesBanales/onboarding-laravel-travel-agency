@@ -16,7 +16,7 @@ class StoreAirlineAction
             'description' => $dto->description,
         ]);
 
-        $airline->enabled_cities()->attach($dto->enabled_cities_ids);
+        $airline->enabledCities()->attach($dto->enabledCitiesIds);
 
         return $airline;
     }

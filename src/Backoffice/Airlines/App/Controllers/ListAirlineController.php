@@ -13,7 +13,7 @@ class ListAirlineController
 {
     public function __invoke(Request $request, ListAirlineAction $action): JsonResponse
     {
-        $airlines = $action->execute((int)$request->query('page'));
+        $airlines = $action->execute((int) $request->query('page'));
 
         return responder()
             ->success($airlines, AirlineTransformer::class)

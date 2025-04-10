@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Flights\Domain\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Lightit\Backoffice\Airlines\Domain\Models\Airline;
@@ -15,12 +16,12 @@ use Lightit\Backoffice\Cities\Domain\Models\City;
  * @property int                             $id
  * @property int                             $departure_city_id
  * @property int                             $arrival_city_id
- * @property string                          $departure_date
- * @property string                          $arrival_date
+ * @property Carbon                          $departure_date
+ * @property Carbon                          $arrival_date
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read City|null $arrivalCity
- * @property-read City|null $departureCity
+ * @property-read City $arrivalCity
+ * @property-read City $departureCity
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight query()
@@ -31,8 +32,8 @@ use Lightit\Backoffice\Cities\Domain\Models\City;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight whereDepartureDate($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight whereUpdatedAt($value)
- * @property-read City|null $arrival_city
- * @property-read City|null $departure_city
+ * @property-read City $arrivalCity
+ * @property-read City $departureCity
  * @property int $airline_id
  * @property-read Airline $airline
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Flight whereAirlineId($value)
@@ -44,10 +45,13 @@ class Flight extends Model
 
     protected $hidden = ['created_at', 'updated_at'];
 
+    protected $casts = ['departure_date' => 'datetime',
+                        'arrival_date' => 'datetime'];
+
     /**
      * @return BelongsTo<City, $this>
     */
-    public function departure_city(): BelongsTo
+    public function departureCity(): BelongsTo
     {
         return $this->belongsTo(City::class, 'departure_city_id');
     }
@@ -55,7 +59,7 @@ class Flight extends Model
     /**
      * @return BelongsTo<City, $this>
     */
-    public function arrival_city(): BelongsTo
+    public function arrivalCity(): BelongsTo
     {
         return $this->belongsTo(City::class, 'arrival_city_id');
     }

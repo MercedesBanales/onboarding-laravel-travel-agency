@@ -181,7 +181,7 @@
                   rows += createFlightRow(flight);
               });
 
-              document.getElementById('flight-table-body').innerHTML = rows;
+              $('#flight-table-body').html(rows);
               updatePagination(page, totalPages); 
           })
           .catch(err => {

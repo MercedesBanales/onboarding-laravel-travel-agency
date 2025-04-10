@@ -16,7 +16,7 @@ use Lightit\Backoffice\Flights\Domain\Models\Flight;
  * @property int                             $id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection<int, City> $enabled_cities
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, City> $enabledCities
  * @property-read int|null $enabled_cities_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, Flight> $flights
  * @property-read int|null $flights_count
@@ -49,7 +49,7 @@ class Airline extends Model
     /**
      * @return BelongsToMany<City, $this, Pivot>
     */
-    public function enabled_cities(): BelongsToMany
+    public function enabledCities(): BelongsToMany
     {
         return $this->belongsToMany(City::class, 'airline_city', 'airline_id', 'city_id');
     }

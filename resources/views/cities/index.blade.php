@@ -23,21 +23,20 @@
   <x-city.edit-form />
   
   <script>
-      const filterByAirline = debounce(() => {
+    let filterCriteria = '';
+    let currentPage = 1;
+      
+    const filterByAirline = debounce(() => {
         const airlineName = document.getElementById('query').value ?? '';
-        const currentPage = parseInt($('#city-table-component').attr('current-page'))
         const sortCriteria = $('#city-table-component').attr('sort-criteria')
-        const encodedName = encodeURIComponent(airlineName);  
-        $('#city-table-component').attr('filter-criteria', encodedName);
-        loadCities(currentPage, sortCriteria, encodedName);
+        filterCriteria = encodeURIComponent(airlineName);  
+        loadCities(currentPage, sortCriteria);
       });
   
       const handleSubmit = (successMessage) => {
-          const currentPage = parseInt($('#city-table-component').attr('current-page'))
           const sortCriteria = $('#city-table-component').attr('sort-criteria')
-          const filterCriteria = $('#city-table-component').attr('filter-criteria')
           showSuccessNotification(successMessage);
-          loadCities(currentPage, sortCriteria, filterCriteria);
+          loadCities(currentPage, sortCriteria);
       }
       
   </script>

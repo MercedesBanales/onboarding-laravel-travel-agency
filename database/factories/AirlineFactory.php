@@ -27,7 +27,7 @@ class AirlineFactory extends Factory
     {
         return $this->afterCreating(function (Airline $airline) {
             $enabledCities = City::inRandomOrder()->take(3)->pluck('id');
-            $airline->enabled_cities()->attach($enabledCities);
+            $airline->enabledCities()->attach($enabledCities);
         });
     }
 }

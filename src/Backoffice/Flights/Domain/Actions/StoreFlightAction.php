@@ -12,11 +12,11 @@ class StoreFlightAction
     public function execute(FlightDto $dto): Flight
     {
         return Flight::create([
-            'airline_id' => $dto->airline_id,
-            'departure_city_id' => $dto->departure_city_id,
-            'arrival_city_id' => $dto->arrival_city_id,
-            'departure_date' => $dto->departure_date,
-            'arrival_date' => $dto->arrival_date,
+            'airline_id' => $dto->airlineId,
+            'departure_city_id' => $dto->departureCityId,
+            'arrival_city_id' => $dto->arrivalCityId,
+            'departure_date' => $dto->departureDate,
+            'arrival_date' => $dto->arrivalDate,
         ]);
     }
 }

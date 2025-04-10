@@ -32,118 +32,120 @@
         </div>
     @endslot
   </x-form>
-  
-<script>
+
+  <script>
     const toggleCityOptions = (optionsId) => {
-        $(optionsId).toggleClass('hidden');
-    }
+    $(optionsId).toggleClass('hidden');
+}
 
-    const setOption = (city, cityIsEnabled) => {
-        return `<div class="flex gap-3">
-                    <div class="flex h-5 shrink-0 items-center">
-                        <div class="group grid size-4 grid-cols-1">
-                            <input name="enabled_cities_ids[]" value="${city.id}" type="checkbox" 
-                                class="city-checkbox col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
-                                ${cityIsEnabled ? "checked" : ""}>
-                            <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
-                                <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                                <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                        </div>
+const setOption = (city, cityIsEnabled) => {
+    return `<div class="flex gap-3">
+                <div class="flex h-5 shrink-0 items-center">
+                    <div class="group grid size-4 grid-cols-1">
+                        <input name="enabled_cities_ids[]" value="${city.id}" type="checkbox" 
+                            class="city-checkbox col-start-1 row-start-1 appearance-none rounded-sm border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
+                            ${cityIsEnabled ? "checked" : ""}>
+                        <svg class="pointer-events-none col-start-1 row-start-1 size-3.5 self-center justify-self-center stroke-white group-has-disabled:stroke-gray-950/25" viewBox="0 0 14 14" fill="none">
+                            <path class="opacity-0 group-has-checked:opacity-100" d="M3 8L6 11L11 3.5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            <path class="opacity-0 group-has-indeterminate:opacity-100" d="M3 7H11" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
                     </div>
-                    <label for="enabled_cities_ids[]" class="text-sm text-gray-500">${city.name}</label>
-                </div>`;
-    }
+                </div>
+                <label for="enabled_cities_ids[]" class="text-sm text-gray-500">${city.name}</label>
+            </div>`;
+}
 
-    const loadOptions = async (optionsBodyId, enabledCities=null) => {
-        const response = await getCities(null, '', '');
-        let options = '';
-        response.data.forEach(city => {
-            const cityIsEnabled = enabledCities && enabledCities.some(c => c.id === city.id);
-            options += setOption(city, cityIsEnabled);
-        });
-        
-        $(optionsBodyId).html(options); 
-    }
+const loadOptions = async (optionsBodyId, enabledCities=null) => {
+    const response = await getCities(null, '', '');
+    let options = '';
+    response.data.forEach(city => {
+        const cityIsEnabled = enabledCities && enabledCities.some(c => c.id === city.id);
+        options += setOption(city, cityIsEnabled);
+    });
+    
+    $(optionsBodyId).html(options); 
+}
 
-    $(document).ready(async function() {
-        await loadOptions('#options-body-create');
+const handleCreate = () => {
+    loadAirlines();
+    clearFields();
+    closeForm('create-airline-modal');
+    showSuccessNotification('Airline successfully created.')
+}
 
-        $.validator.setDefaults({
-            ignore: []
-        });
+const clearFields = () => {
+    const form = $('#create-airline-form');
+    form.find('input').val('');
+    form.find('textarea').val('');
+    $('#enabled-cities-options').find('input[type="checkbox"]').prop('checked', false);
+    $('#enabled-cities-options').addClass('hidden');
+}
 
-        $("form[name='create-airline']").validate({
-            highlight: function(element) {
-                $(element).closest('.group').removeClass('has-success').addClass('has-error');
-            },
-            unhighlight: function(element) {
-                $(element).closest('.group').addClass('has-success').removeClass('has-error');
-            },
-            errorClass: "text-red-500 text-sm mt-1",
-            rules: {
-                name: "required",
-                description: "required",
-                "enabled_cities_ids[]": "required"
-            },
-            messages: {
-                name: "Please enter the airline's name",
-                description: "Please enter the airline's description",
-                "enabled_cities_ids[]": "Please select at least one city"
-            },
-            errorPlacement: function(error, element) {
-                if (element.attr("name") === "enabled_cities_ids[]") {
-                    error.insertAfter("#enabled-cities-div"); 
-                } else {
-                    error.insertAfter(element); 
-                }
-            },
-            submitHandler: function(form, event) {
-                event.preventDefault()
-                const formData = new FormData(form);
-                
-                fetch($(form).attr('action'), {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    method: $(form).attr('method'),
-                    body: JSON.stringify({
-                        name: formData.get('name'),
-                        description: formData.get('description'),
-                        enabled_cities_ids: formData.getAll('enabled_cities_ids[]')
-                    })
-                })
-                .then(res => {
-                    if (!res.ok) {
-                        return res.json().then(err => { throw err }); 
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    handleCreate(); 
-                })
-                .catch(res => { 
-                    showErrorNotification(res.error);
-                });
+$(document).ready(async function() {
+    await loadOptions('#options-body-create');
+
+    $.validator.setDefaults({
+        ignore: []
+    });
+
+    $("form[name='create-airline']").validate({
+        highlight: function(element) {
+            $(element).closest('.group').removeClass('has-success').addClass('has-error');
+        },
+        unhighlight: function(element) {
+            $(element).closest('.group').addClass('has-success').removeClass('has-error');
+        },
+        errorClass: "text-red-500 text-sm mt-1",
+        rules: {
+            name: "required",
+            description: "required",
+            "enabled_cities_ids[]": "required"
+        },
+        messages: {
+            name: "Please enter the airline's name",
+            description: "Please enter the airline's description",
+            "enabled_cities_ids[]": "Please select at least one city"
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") === "enabled_cities_ids[]") {
+                error.insertAfter("#enabled-cities-div"); 
+            } else {
+                error.insertAfter(element); 
             }
+        },
+        submitHandler: function(form, event) {
+            event.preventDefault()
+            const formData = new FormData(form);
+            
+            fetch($(form).attr('action'), {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: $(form).attr('method'),
+                body: JSON.stringify({
+                    name: formData.get('name'),
+                    description: formData.get('description'),
+                    enabled_cities_ids: formData.getAll('enabled_cities_ids[]')
+                })
+            })
+            .then(res => {
+                if (!res.ok) {
+                    return res.json().then(err => { throw err }); 
+                }
+                return res.json();
+            })
+            .then(data => {
+                handleCreate(); 
+            })
+            .catch(res => { 
+                showErrorNotification(res.error);
             });
-    })
-
-    const handleCreate = () => {
-        loadAirlines();
-        clearFields();
-        closeForm('create-airline-modal');
-        showSuccessNotification('Airline successfully created.')
-    }
-
-    const clearFields = () => {
-        const form = $('#create-airline-form');
-        form.find('input').val('');
-        form.find('textarea').val('');
-        $('#enabled-cities-options').find('input[type="checkbox"]').prop('checked', false);
-        $('#enabled-cities-options').addClass('hidden');
-    }
+        }
+        });
+})
 </script>
+
+  
 
 
 

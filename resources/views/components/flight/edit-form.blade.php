@@ -49,7 +49,7 @@
         populateOriginDropdown(cities, 'edit');
         populateDestinationDropdown(cities, 'edit');
 
-        $('#departure-date, #arrival-date').on('change input focus blur keyup', function() {
+        $('#edit-departure-date, #edit-arrival-date').on('change input focus blur keyup', function() {
             updateInputState(this);
         });
 

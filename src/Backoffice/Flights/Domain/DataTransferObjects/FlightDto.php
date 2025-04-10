@@ -9,11 +9,11 @@ use DateTime;
 readonly class FlightDto
 {
     public function __construct(
-        public int|null $airline_id,
-        public int|null $departure_city_id,
-        public int|null $arrival_city_id,
-        public DateTime|null $departure_date,
-        public DateTime|null $arrival_date,
+        public int|null $airlineId,
+        public int|null $departureCityId,
+        public int|null $arrivalCityId,
+        public DateTime|null $departureDate,
+        public DateTime|null $arrivalDate,
     ) {
     }
 }

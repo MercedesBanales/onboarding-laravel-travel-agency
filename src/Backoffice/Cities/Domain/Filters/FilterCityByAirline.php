@@ -15,15 +15,16 @@ class FilterCityByAirline implements Filter
 {
     /**
      * @param Builder<City> $query
+     * @param string        $value
      */
     public function __invoke(Builder $query, mixed $value, string $property): void
     {
         $query
-        ->whereHas('departure_flights', function (Builder $query) use ($value) {
+        ->whereHas('departureFlights', function (Builder $query) use ($value) {
             $query->join('airlines', 'flights.airline_id', '=', 'airlines.id')
                 ->whereRaw('LOWER(airlines.name) LIKE ?', ['%' . strtolower($value) . '%']);
         })
-        ->orWhereHas('arrival_flights', function (Builder $query) use ($value) {
+        ->orWhereHas('arrivalFlights', function (Builder $query) use ($value) {
             $query->join('airlines', 'flights.airline_id', '=', 'airlines.id')
                 ->whereRaw('LOWER(airlines.name) LIKE ?', ['%' . strtolower($value) . '%']);
         });

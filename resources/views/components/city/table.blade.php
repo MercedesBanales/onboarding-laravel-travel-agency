@@ -39,32 +39,32 @@
   <script>
     const allSortCriteria = ['id', 'name'];
 
-    async function loadCities(page = 1, sort = '', filter = '') {
-    try {
-        const response = await getCities(page, sort, filter); 
+    async function loadCities(page = 1, sort = '') {
+      try {
+          const response = await getCities(page, sort, filterCriteria); 
 
-        let rows = '';
-        const totalPages = response.pagination.totalPages;
+          let rows = '';
+          const totalPages = response.pagination.totalPages;
 
-        response.data.forEach(city => {
-            rows += createCityRow(city);
-        });
+          response.data.forEach(city => {
+              rows += createCityRow(city);
+          });
 
-        $('#city-table-body').html(rows);
-        $('#city-table-component').attr('current-page', page);
-        updatePagination(page, totalPages, sort);
-    } catch (error) {
-        console.error('Error cargando ciudades:', error);
+          $('#city-table-body').html(rows);
+          currentPage = page;
+          updatePagination(totalPages, sort);
+      } catch (error) {
+          console.error('Error cargando ciudades:', error);
+      }
     }
-}
 
     function createCityRow(city) {
       return `
           <tr>
             <td class="py-4 pr-3 pl-4 text-sm font-medium whitespace-nowrap text-gray-900 sm:pl-6">${city.id}</td>
             <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${city.name}</td>
-            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${city.arrival_flights.length}</td>
-            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${city.departure_flights.length}</td>
+            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${city.arrivalFlights.length}</td>
+            <td class="px-3 py-4 text-sm whitespace-nowrap text-gray-500">${city.departureFlights.length}</td>
             <td class="relative py-4 pr-4 pl-3 text-right text-sm font-medium whitespace-nowrap sm:pr-6">
                 <button class="text-indigo-600 hover:text-indigo-900" onclick="handleEdit(${city.id}, '${city.name}', '${city.timezone}')">Edit</button>
             </td>
@@ -75,16 +75,15 @@
         `
     }
 
-    function updatePagination(currentPage, totalPages, sortCriteria) {
-      const paginationComponent = $('#pagination-component');
-      const filterCriteria = $('#city-table-component').attr('filter-criteria') ?? ''
+    function updatePagination(totalPages, sortCriteria) {
+      const paginationComponent = document.getElementById('pagination-component');
 
       let pageLinks = '';
       for (let i = 1; i <= totalPages; i++) {
         pageLinks += `<button class="inline-flex items-center border-t-2 ${i === currentPage ? 'border-indigo-500 text-indigo-600' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} px-4 pt-4 text-sm font-medium" onclick="loadCities(${i}, '${sortCriteria}', '${filterCriteria}')">${i}</button>`;
       }      
       
-      paginationComponent.html(`
+      paginationComponent.innerHTML = `
             <div class="-mt-px flex w-0 flex-1">
             <button onclick="loadCities(${currentPage - 1}, '${sortCriteria}', '${filterCriteria}')" 
                     class="inline-flex items-center border-t-2 border-transparent pt-4 pr-1 text-sm font-medium text-gray-500 hover:text-gray-700 ${currentPage === 1 ? 'disabled:text-gray-300 cursor-not-allowed' : ''}" 
@@ -108,11 +107,10 @@
                     </svg>
                 </button>
             </div>
-        `);
+        `;
     }
 
     const handleSort = (criteria) => {
-      const currentPage = parseInt($('#city-table-component').attr('current-page'));
       const sortButton = $(`#${criteria}-sort`);
       const unsorted = sortButton.attr('data-state') === 'unsorted';
       $('#city-table-component').attr('sort-criteria', unsorted ? criteria : '');
@@ -130,7 +128,6 @@
         }
       });
 
-      const filterCriteria = $('#city-table-component').attr('filter-criteria');
       loadCities(currentPage, unsorted ? criteria : '', filterCriteria);
     }
 
@@ -140,7 +137,6 @@
       $('#edit-city-name').attr('placeholder', cityName);
       $('#edit-city-timezone').attr('placeholder', cityTimezone);
     }
-
 
     const handleDelete = (cityId, cityName) => {
       const title = `Delete ${cityName}`;

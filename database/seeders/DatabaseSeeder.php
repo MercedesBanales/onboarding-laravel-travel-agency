@@ -30,25 +30,26 @@ class DatabaseSeeder extends Seeder
             ->count(20)
             ->state(function(){
                 $airline = Airline::inRandomOrder()->firstOrFail();
-                $enabled_cities = $airline->enabled_cities;
-                $departure_city = $enabled_cities->random(); 
-                $arrival_city = $enabled_cities->reject(fn ($city) => $city->id == $departure_city->id)->random();
+                $enabledCities = $airline->enabledCities;
+                $departureCity = $enabledCities->random(); 
+                $arrivalCity = $enabledCities->reject(fn ($city) => $city->id == $departureCity->id)->random();
 
-                $departure_date = Carbon::now($departure_city->timezone)
+                $departureDate = Carbon::now($departureCity->timezone)
                     ->addDays(rand(1, 365))
                     ->setTime(rand(0, 23), rand(0, 59));
 
-                $arrival_date = $departure_date
+                $arrivalDate = $departureDate
                     ->copy()
-                    ->addHours(rand(1, 12))
-                    ->setTimezone($arrival_city->timezone);
+                    ->addHours(rand(1, 12));
+
+                $arrivalDate->setTimezone($arrivalCity->timezone);
 
                 return [
                     'airline_id'=> $airline->id,
-                    'departure_city_id' => $departure_city->id,
-                    'arrival_city_id' => $arrival_city->id,
-                    'departure_date' => $departure_date,
-                    'arrival_date' => $arrival_date
+                    'departure_city_id' => $departureCity->id,
+                    'arrival_city_id' => $arrivalCity->id,
+                    'departure_date' => $departureDate,
+                    'arrival_date' => $arrivalDate
                 ];
             })
             ->create();

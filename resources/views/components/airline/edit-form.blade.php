@@ -12,7 +12,7 @@
                 <div class="mt-2">
                     <textarea id="edit-airline-description" rows="4" name="description" id="description" class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"></textarea>
                 </div>
-            </div>
+            </div> 
             <div class="flex flex-col">
                 <div id="enabled-cities-div-edit" class="flex items-center gap-4 w-full">
                     <label class="text-sm/6 font-medium text-gray-900">Enabled cities:</label>
@@ -32,82 +32,80 @@
         </div>
     @endslot
   </x-form>
-  
-<script>
-   
+
+  <script>
     $(document).ready(function() {
-
-        $("form[name='edit-airline']").validate({
-            highlight: function(element) {
-            $(element).closest('.group').removeClass('has-success').addClass('has-error');
-        },
-        unhighlight: function(element) {
-            $(element).closest('.group').addClass('has-success').removeClass('has-error');
-        },
-        errorClass: "text-red-500 text-sm mt-1",
-        rules: {
-            "enabled_cities_ids[]": "required"
-        },
-        messages: {
-            "enabled_cities_ids[]": "At least one city must be selected"
-        },
-        errorPlacement: function(error, element) {
-            if (element.attr("name") === "enabled_cities_ids[]") {
-                error.insertAfter("#enabled-cities-div-edit"); 
-            } else {
-                error.insertAfter(element); 
-            }
-        },
-        submitHandler: function(form, event) {
-            event.preventDefault()
-            const formData = new FormData(form);
-
-            if (formData.get('name').trim() === '') formData.delete('name');
-            if (formData.get('description').trim() === '') formData.delete('description');
-            
-            fetch($(form).attr('action'), {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                method: 'PATCH',
-                body: JSON.stringify({
-                    name: formData.get('name'),
-                    description: formData.get('description'),
-                    enabled_cities_ids: formData.getAll('enabled_cities_ids[]')
-                })
-            })
-            .then(res => {
-                if (!res.ok) {
-                    return res.json().then(err => { throw err }); 
-                }
-                return res.json();
-            })
-            .then(res => {
-                handleSuccess(res.data.name, res.data.description); 
-            })
-            .catch(res => { 
-                showErrorNotification(res.error);
-            });
+    $("form[name='edit-airline']").validate({
+        highlight: function(element) {
+        $(element).closest('.group').removeClass('has-success').addClass('has-error');
+    },
+    unhighlight: function(element) {
+        $(element).closest('.group').addClass('has-success').removeClass('has-error');
+    },
+    errorClass: "text-red-500 text-sm mt-1",
+    rules: {
+        "enabled_cities_ids[]": "required"
+    },
+    messages: {
+        "enabled_cities_ids[]": "At least one city must be selected"
+    },
+    errorPlacement: function(error, element) {
+        if (element.attr("name") === "enabled_cities_ids[]") {
+            error.insertAfter("#enabled-cities-div-edit"); 
+        } else {
+            error.insertAfter(element); 
         }
+    },
+    submitHandler: function(form, event) {
+        event.preventDefault()
+        const formData = new FormData(form);
+
+        if (formData.get('name').trim() === '') formData.delete('name');
+        if (formData.get('description').trim() === '') formData.delete('description');
+        
+        fetch($(form).attr('action'), {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            method: 'PATCH',
+            body: JSON.stringify({
+                name: formData.get('name'),
+                description: formData.get('description'),
+                enabled_cities_ids: formData.getAll('enabled_cities_ids[]')
+            })
+        })
+        .then(res => {
+            if (!res.ok) {
+                return res.json().then(err => { throw err }); 
+            }
+            return res.json();
+        })
+        .then(res => {
+            handleSuccess(res.data.name, res.data.description); 
+        })
+        .catch(res => { 
+            showErrorNotification(res.error);
         });
-    })
-
-    const handleSuccess = (name, description) => {
-        loadAirlines();
-        $('#edit-airline-name').attr('placeholder', name);
-        $('#edit-airline-description').attr('placeholder', description);
-        clearEditFields();
-        showSuccessNotification('Airline successfully updated.')
     }
+    });
+})
 
-    const clearEditFields = () => {
-        const form = $('#edit-airline-form');
-        $('#edit-airline-name').val('');
-        form.find('textarea').val('');
-        $('#enabled-cities-options-edit').addClass('hidden');
-    }
+const handleSuccess = (name, description) => {
+    loadAirlines();
+    $('#edit-airline-name').attr('placeholder', name);
+    $('#edit-airline-description').attr('placeholder', description);
+    clearEditFields();
+    showSuccessNotification('Airline successfully updated.')
+}
 
+const clearEditFields = () => {
+    const form = $('#edit-airline-form');
+    $('#edit-airline-name').val('');
+    form.find('textarea').val('');
+    $('#enabled-cities-options-edit').addClass('hidden');
+}
 </script>
+
 
 
 

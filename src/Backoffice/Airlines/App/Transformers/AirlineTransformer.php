@@ -21,7 +21,7 @@ class AirlineTransformer extends Transformer
             'id' => $airline->id,
             'name' => $airline->name,
             'description' => $airline->description,
-            'enabled_cities' => $airline->enabled_cities,
+            'enabledCities' => $airline->enabledCities,
             'flights' => $airline->flights,
         ];
     }

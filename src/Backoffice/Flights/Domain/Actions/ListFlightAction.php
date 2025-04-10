@@ -17,8 +17,8 @@ class ListFlightAction
     public function execute(): LengthAwarePaginator
     {
         return QueryBuilder::for(Flight::class)
-            ->with('departure_city')
-            ->with('arrival_city')
+            ->with('departureCity')
+            ->with('arrivalCity')
             ->with('airline')
             ->paginate(5);
     }
