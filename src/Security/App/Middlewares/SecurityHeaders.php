@@ -34,25 +34,25 @@ class SecurityHeaders
         $headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
 
         // Defines a Content Security Policy (CSP) that restricts resources (e.g., scripts, styles) to only come from the same origin (`self`) to prevent cross-site scripting (XSS) and data injection attacks.
-        if (App::isLocal()) {
-            $headers->set(
-                'Content-Security-Policy',
-                "default-src 'self';" .
-                "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:5173;" .
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com data:;" .
-                "connect-src 'self' ws://127.0.0.1:5173 http://127.0.0.1:5173;" .
-                "font-src 'self' https://fonts.gstatic.com data:;" .
-                "img-src 'self' data:;"
-            );
-        } else {
-            $headers->set(
-                'Content-Security-Policy',
-                "default-src 'self';" .
-                "script-src 'self' https://unpkg.com;" .
-                "style-src 'self' https://fonts.googleapis.com;" .
-                "font-src 'self' https://fonts.gstatic.com;"
-            );
-        }
+        // if (App::isLocal()) {
+        //     $headers->set(
+        //         'Content-Security-Policy',
+        //         "default-src 'self';" .
+        //         "script-src 'self' 'unsafe-inline' 'unsafe-eval' http://127.0.0.1:5173;" .
+        //         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://fonts.gstatic.com data:;" .
+        //         "connect-src 'self' ws://127.0.0.1:5173 http://127.0.0.1:5173;" .
+        //         "font-src 'self' https://fonts.gstatic.com data:;" .
+        //         "img-src 'self' data:;"
+        //     );
+        // } else {
+        //     $headers->set(
+        //         'Content-Security-Policy',
+        //         "default-src 'self';" .
+        //         "script-src 'self' https://unpkg.com;" .
+        //         "style-src 'self' https://fonts.googleapis.com;" .
+        //         "font-src 'self' https://fonts.gstatic.com;"
+        //     );
+        // }
 
         // Ensures no referrer information is sent with requests, enhancing privacy and preventing leakage of sensitive URLs.
         $headers->set('Referrer-Policy', 'no-referrer');
