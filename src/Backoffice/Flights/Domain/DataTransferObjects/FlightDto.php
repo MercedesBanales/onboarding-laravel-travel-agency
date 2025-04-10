@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Lightit\Backoffice\Flights\Domain\DataTransferObjects;
 
-use DateTime;
+use Carbon\Carbon;
 
 readonly class FlightDto
 {
@@ -12,8 +12,8 @@ readonly class FlightDto
         public int|null $airlineId,
         public int|null $departureCityId,
         public int|null $arrivalCityId,
-        public DateTime|null $departureDate,
-        public DateTime|null $arrivalDate,
+        public Carbon|null $departureDate,
+        public Carbon|null $arrivalDate,
     ) {
     }
 }

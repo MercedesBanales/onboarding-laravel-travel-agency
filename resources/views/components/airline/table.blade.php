@@ -72,7 +72,7 @@
     });
 
     function handleAirlineEdit(airline) {
-        loadOptions('#options-body-edit', airline.enabledCities);
+        loadOptions('#options-body-edit', 'edit', airline.enabledCities);
         openForm('edit-airline-modal');
         $('#edit-airline-form').attr('action', `/api/airlines/${airline.id}`);
         $('#edit-airline-name').attr('placeholder', airline.name);

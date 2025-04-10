@@ -23,11 +23,11 @@ class FlightTransformer extends Transformer
             'departureCity' => $flight->departureCity,
             'arrivalCity' => $flight->arrivalCity,
             'departure_date' => $flight->departureCity->dateToTimezone(
-                $flight->departure_date->toDateString()
+                $flight->departure_date->toDateTimeString()
             )->format(
                 'd-m-Y H:i:s'
             ),
-            'arrival_date' => $flight->arrivalCity->dateToTimezone($flight->arrival_date->toDateString())->format(
+            'arrival_date' => $flight->arrivalCity->dateToTimezone($flight->arrival_date->toDateTimeString())->format(
                 'd-m-Y H:i:s'
             ),
         ];

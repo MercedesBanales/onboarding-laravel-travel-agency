@@ -54,15 +54,27 @@ class UpdateFlightRequest extends FormRequest
                 $flight = $this->route('flight');
 
                 if ($this->sameOriginAndDestination($flight)) {
-                    $this->setError($validator, 'arrival_city_id', 'The origin and destination cities must be different.');
+                    $this->setError(
+                        $validator,
+                        'arrival_city_id',
+                        'The origin and destination cities must be different.'
+                    );
                 }
 
                 if (! $this->airlineEnablesFlightCities($flight)) {
-                    $this->setError($validator, 'airline_id',  "The flight's departure and arrival city must be enabled by the airline.");
+                    $this->setError(
+                        $validator,
+                        'airline_id',
+                        "The flight's departure and arrival city must be enabled by the airline."
+                    );
                 }
 
                 if (! $this->validFlightDateTimes($flight)) {
-                    $this->setError($validator, 'arrival_date', 'The arrival date and time cannot be before the departure date and time.');                  
+                    $this->setError(
+                        $validator,
+                        'arrival_date',
+                        'The arrival date and time cannot be before the departure date and time.'
+                    );
                 }
             },
         ];
@@ -98,10 +110,10 @@ class UpdateFlightRequest extends FormRequest
         $arrivalCity = City::query()->find($arrivalCityId) ?? $flight->arrivalCity;
 
         $departureDateToTz = $departureCity->dateToTimezone(
-            $departureDate != '' ? $departureDate : $flight->departure_date->toDateString()
+            $departureDate != '' ? $departureDate : $flight->departure_date->toDateTimeString()
         );
         $arrivalDateToTz = $arrivalCity->dateToTimezone(
-            $arrivalDate != '' ? $arrivalDate : $flight->arrival_date->toDateString()
+            $arrivalDate != '' ? $arrivalDate : $flight->arrival_date->toDateTimeString()
         );
 
         return $departureDateToTz->lessThan($arrivalDateToTz);

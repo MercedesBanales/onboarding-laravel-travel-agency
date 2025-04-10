@@ -7,6 +7,7 @@ namespace Database\Seeders;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 use Carbon\Carbon;
+use Carbon\CarbonImmutable;
 use Database\Factories\AirlineFactory;
 use Database\Factories\CityFactory;
 use Database\Factories\FlightFactory;
@@ -34,13 +35,11 @@ class DatabaseSeeder extends Seeder
                 $departureCity = $enabledCities->random(); 
                 $arrivalCity = $enabledCities->reject(fn ($city) => $city->id == $departureCity->id)->random();
 
-                $departureDate = Carbon::now($departureCity->timezone)
+                $departureDate = CarbonImmutable::now($departureCity->timezone)
                     ->addDays(rand(1, 365))
                     ->setTime(rand(0, 23), rand(0, 59));
 
-                $arrivalDate = $departureDate
-                    ->copy()
-                    ->addHours(rand(1, 12));
+                $arrivalDate = $departureDate->addHours(rand(1, 12));
 
                 $arrivalDate->setTimezone($arrivalCity->timezone);
 

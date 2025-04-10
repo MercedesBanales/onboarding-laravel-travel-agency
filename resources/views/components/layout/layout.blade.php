@@ -178,6 +178,7 @@
               const flights = response.data.data;
 
               flights.forEach(flight => {
+                console.log(flight.departure_date);
                   rows += createFlightRow(flight);
               });
 
